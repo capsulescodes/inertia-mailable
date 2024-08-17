@@ -1,0 +1,15 @@
+{
+    "name" : "capsulescodes/inertia-mailable",
+    "description" : "Seamlessly craft dynamic and reusable email templates using Inertia",
+    "type" : "library",
+    "license" : "MIT",
+    "keywords" : [ "laravel", "inertia", "mailable" ],
+    "minimum-stability" : "stable",
+    "require" : { "php" : "^8.2.0", "illuminate/mail" : "^11.20.0", "inertiajs/inertia-laravel" : "^1.3.0", "symfony/dom-crawler" : "^7.1.1" },
+    "require-dev" : { "orchestra/testbench" : "^9.3.0", "pestphp/pest" : "^2.35.0", "mockery/mockery" : "^1.6.12" },
+    "autoload" : { "psr-4" : { "CapsulesCodes\\InertiaMailable\\" : "src/" } },
+    "autoload-dev" : { "psr-4" : { "CapsulesCodes\\InertiaMailable\\Tests\\" : "tests/" } },
+    "extra" : { "laravel" : { "providers" : [ "CapsulesCodes\\InertiaMailable\\Providers\\InertiaMailableServiceProvider" ] } },
+    "config" : { "optimize-autoloader" : true, "allow-plugins" : { "pestphp/pest-plugin" : true } },
+    "scripts": { "test" : [ "npm run build", "vendor/bin/pest" ] }
+}

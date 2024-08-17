@@ -1,0 +1,6 @@
+vendor
+node_modules
+composer.lock
+package-lock.json
+.flint.local.*
+tests/App/build

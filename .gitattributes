@@ -1,0 +1,9 @@
+.github export-ignore
+tests export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+capsules-inertia-mailable-image.png export-ignore
+phpunit.xml export-ignore
+package.json
+tsconfig.json
+vite.config.js

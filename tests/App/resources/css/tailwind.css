@@ -1,0 +1,11 @@
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components
+{
+    .tailwind-css
+    {
+        @apply bg-teal-200;
+    }
+}
