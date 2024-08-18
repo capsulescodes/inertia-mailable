@@ -1,9 +1,9 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px"  alt="Inertia Mailable Image" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" height="265px"  alt="Inertia Mailable Image" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
-Inertia Mailable empowers you to build beautiful, component-driven emails in Laravel, utilizing the power of InertiaJS. Create interactive and responsive email designs effortlessly by composing Vue components and embedding them into your mailables. Streamline your email creation process while maintaining a consistent and modular design system across both web and email interfaces.
+Inertia Mailable empowers you to build beautiful, component-driven emails in Laravel, utilizing the power of InertiaJS. Create interactive and responsive email designs effortlessly by composing Vue components and embedding them into your mailables.
 
 <br>
 
