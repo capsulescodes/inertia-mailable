@@ -1,12 +1,12 @@
 <?php
 
 use CapsulesCodes\InertiaMailable\Mail\Mailable;
-use CapsulesCodes\InertiaMailable\Tests\App\Mail;
+use CapsulesCodes\InertiaMailable\Tests\Fixtures\Mail;
 
 
 beforeEach( function() : void
 {
-    $this->email = new Mail( 'foo@bar.baz', 'Qux' );
+    $this->email = new Mail( 'Qux' );
 } );
 
 
@@ -44,7 +44,7 @@ it( "returns an exception if manifest is not found", function() : void
 
 it( "returns an exception if file not found in manifest", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/App/build' ) );
+    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
 
     Config::set( 'inertia-mailable.js', 'corge' );
 
@@ -52,59 +52,46 @@ it( "returns an exception if file not found in manifest", function() : void
 } );
 
 
-it( "can render a mail with custom CSS", function()
-{
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/App/build' ) );
-
-    Config::set( 'inertia-mailable.js', 'tests/App/resources/js/vue/mail.js' );
-
-    Config::set( 'inertia-mailable.css', 'tests/App/resources/css/plain.css' );
-
-    expect( $this->email->render() )->toContain( "<div class=\"custom-css\" style=\"background-color: rgb( 12 34 56 );\"></div>" );
-} );
-
-
 it( "can render a mail with Tailwind CSS", function()
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/App/build' ) );
+    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
 
-    Config::set( 'inertia-mailable.js', 'tests/App/resources/js/vue/mail.js' );
-
-    Config::set( 'inertia-mailable.css', 'tests/App/resources/css/tailwind.css' );
+    Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
 
     App::shouldReceive( 'basePath' )->with()->andReturn( getcwd() );
 
     App::shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
-    expect( $this->email->render() )->toContain( "<div class=\"block tailwind-css\" style=\"--tw-bg-opacity: 1; background-color: rgb(153 246 228 / var(--tw-bg-opacity)); display: block;\"></div>" );
+    expect( $this->email->render() )->toContain( "<img class=\"my-4 max-w-full\" src=\"https://capsules.codes/storage/canvas/images/LentWCgPB1iFQgUsSfBf3NgNznNH4FwFaAD0XecL.png\" style=\"margin-top: 1rem; margin-bottom: 1rem; max-width: 100%;\">" );
 } );
+
 
 
 
 
 it( "can render a mail based on Vue Javascript file", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/App/build' ) );
+    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
 
-    Config::set( 'inertia-mailable.js', 'tests/App/resources/js/vue/mail.js' );
+    Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
 
     expect( $this->email->render() )
         ->toContain( "<p>Hello, Qux!</p>" )
-        ->toContain( "<p>This is a mail from Capsules Codes made with Laravel, Inertia, Vue and Javascript</p>" )
+        ->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" )
         ->toContain( "<p>Regards,</p>" )
-        ->toContain( "<p>Capsules Codes</p>" );
+        ->toContain( "<p>Inertia Mailable</p>" );
 } );
 
 
 it( "can render a mail based on Vue Typescript file", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/App/build' ) );
+    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
 
-    Config::set( 'inertia-mailable.ts', 'tests/App/resources/ts/vue/mail.ts' );
+    Config::set( 'inertia-mailable.ts', 'stubs/ts/vue/mail.ts' );
 
     expect( $this->email->render() )
         ->toContain( "<p>Hello, Qux!</p>" )
-        ->toContain( "<p>This is a mail from Capsules Codes made with Laravel, Inertia, Vue and Typescript</p>" )
+        ->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Typescript</p>" )
         ->toContain( "<p>Regards,</p>" )
-        ->toContain( "<p>Capsules Codes</p>" );
+        ->toContain( "<p>Inertia Mailable</p>" );
 } );

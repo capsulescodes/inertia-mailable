@@ -31,6 +31,20 @@ class Mailable extends Base
         return $this;
     }
 
+    public function props( $key, $value = null )
+    {
+        if( is_array( $key ) )
+        {
+            $this->propsData = array_merge( $this->propsData, $key );
+        }
+        else
+        {
+            $this->propsData[ $key ] = $value;
+        }
+
+        return $this;
+    }
+
     public function view( $view, array $data = [] ) : self
     {
         $this->view = $view;
@@ -40,26 +54,36 @@ class Mailable extends Base
         return $this;
     }
 
-
     public function render() : string
     {
-        if( method_exists( $this, 'prepare' ) ) $this->prepare();
+        return $this->withLocale( $this->locale, function()
+        {
+            $this->prepareMailableForDelivery();
 
-        return ( new CssToInlineStyles() )->convert( $this->getHtml(), $this->getCss() );
+            $this->ensurePropsAreHydrated();
+
+            return ( new CssToInlineStyles() )->convert( $this->getHtml(), $this->getCss() );
+        } );
     }
 
+    private function ensurePropsAreHydrated() : void
+    {
+        if( ! method_exists( $this, 'content' ) ) return;
+
+        $content = $this->content();
+
+        foreach( $content->props as $key => $value ) $this->props( $key, $value );
+    }
 
     protected function buildView() : array
     {
         return array_filter( [ 'html' => new HtmlString( $this->render() ), 'text' => $this->textView ?? null ] );
     }
 
-
     protected function getRoot() : string
     {
         return isset( $this->root ) && ! empty( $this->root ) ? $this->root : 'inertia-mailable::mail';
     }
-
 
     protected function getData() : array
     {
@@ -115,11 +139,11 @@ class Mailable extends Base
         {
             $path = "public/" . Str::random( 40 );
 
-            Storage::put( $path, html_entity_decode( $this->getInertia( $this->getData() ) ) );
+            Storage::put( $path, html_entity_decode( $this->getHtml() ) );
 
-            $file = $css ? Config::get( 'inertia-mailable.css' ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
+            $file = isset( $css ) ? Config::get( 'inertia-mailable.css' ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
 
-            $css = Process::path( App::basePath() )->run( [ "node_modules/.bin/tailwind", "-i", $file, "--content", Storage::path( $path ) ] )->output();
+            $css = Process::path( App::basePath() )->run( [ App::basePath( 'node_modules/.bin/tailwind' ), "-i", $file, "--content", Storage::path( $path ) ] )->output();
 
             if( Storage::has( $path ) ) Storage::delete( $path );
         }

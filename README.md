@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Laravel Population" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Vue Mailable" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
@@ -13,18 +13,108 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 ## Installation
 
-```bash
-composer require capsulescodes/inertia-mailable
-```
+1. Install package and publish expected inertia mailable file [ vue-js, vue-ts ]
 
 ```bash
-php artisan vendor:publish capsulescodes/inertia-mailable --tag=js
+composer require capsulescodes/inertia-mailable
+
+php artisan vendor:publish --tag=inertia-mailable-vue-js
+```
+
+<br>
+
+2. Add filename into vite config's input array
+
+```javascript
+plugins : [
+    laravel( {
+        input : [ ..., 'resources/js/mail.js' ],
+    } )
+```
+
+<br>
+
+3. Build files
+
+```
+npm run build
 ```
 
 <br>
 
 ## Usage
 
+`App\Mails\InertiaMailableInstalled.php`
+
+```php
+<?php
+
+namespace App\Mail;
+
+use CapsulesCodes\InertiaMailable\Mail\Mailable;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
+use CapsulesCodes\InertiaMailable\Mail\Mailables\Content;
+
+
+class InertiaMailableInstalled extends Mailable
+{
+    private string $name;
+
+
+    public function __construct( string $name )
+    {
+        $this->name = $name;
+    }
+
+
+    public function envelope() : Envelope
+    {
+        return new Envelope( from : new Address( 'example@example.com', 'Mailable World' ), subject : 'Hello Inertia Mailable World!' );
+    }
+
+    public function content() : Content
+    {
+        return new Content( view : 'Welcome', props : [ 'name' => $this->name ] );
+    }
+
+    public function attachments() : array
+    {
+        return [];
+    }
+}
+```
+
+<br>
+
+`routes/web.php`
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Mail\InertiaMailableInstalled;
+use Illuminate\Support\Facades\Mail;
+
+
+Route::get( '/render', fn() => ( new InertiaMailableInstalled( "Mailable World" ) )->render() );
+
+Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new InertiaMailableInstalled( "Mailable World" ) ); } );
+```
+
+<br>
+
+```
+php artisan serve
+```
+
+<br>
+
+`> http://127.:8000/render`
+
+<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Vue Mailable" /></p>
+
+<br>
 <br>
 
 ## Supported Frameworks

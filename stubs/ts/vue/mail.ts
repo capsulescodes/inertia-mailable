@@ -1,5 +1,4 @@
 import { createInertiaApp } from '@inertiajs/vue3';
-import * as process from 'process';
 import { renderToString } from '@vue/server-renderer';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { DefineComponent, createSSRApp, h } from 'vue';

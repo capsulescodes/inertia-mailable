@@ -12,24 +12,24 @@ const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
 <template>
 
-<Table class="bg-slate-100" align="center">
+    <Table class="body" align="center">
 
-    <Header />
+        <Header />
 
-    <Table class="p-8 shadow bg-primary-white" align="center" width="570">
+        <Table class="p-8 shadow bg-primary-white" align="center" width="570">
 
-        <slot />
+            <slot />
 
-        <Table v-if="hasSubCopy" class="mt-6 pt-6 border-0 border-t border-solid border-slate-200">
+            <Table v-if="hasSubCopy" class="mt-6 pt-6 border-0 border-t border-solid border-slate-200">
 
-            <slot name="subcopy" />
+                <slot name="subcopy" />
+
+            </Table>
 
         </Table>
 
+        <Footer />
+
     </Table>
-
-    <Footer />
-
-</Table>
 
 </template>

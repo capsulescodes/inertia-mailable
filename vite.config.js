@@ -5,16 +5,16 @@ import fs from 'fs';
 
 export default defineConfig( {
     plugins : [ vue(), manifest() ],
-    resolve : { alias : { '~' : '/components' } },
+    resolve : { alias : { '/vendor/capsulescodes/inertia-mailable/components' : '/components' } },
     build : {
         target : 'esnext',
-        outDir : 'tests/App/build',
+        outDir : 'tests/Fixtures/build',
         emptyOutDir : true,
         manifest : true,
         rollupOptions : {
             input : {
-                'vue-js' : 'tests/App/resources/js/vue/mail.js',
-                'vue-ts' : 'tests/App/resources/ts/vue/mail.ts'
+                'vue-js' : 'stubs/js/vue/mail.js',
+                'vue-ts' : 'stubs/ts/vue/mail.ts'
             },
             output : {
                 entryFileNames : '[name].js'
@@ -31,7 +31,7 @@ function manifest()
         apply : 'build',
         writeBundle()
         {
-            const path = 'tests/App/build';
+            const path = 'tests/Fixtures/build';
             fs.renameSync( `${path}/.vite/manifest.json`, `${path}/manifest.json` );
             fs.rmdirSync( `${path}/.vite` );
         }

@@ -246,9 +246,8 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 {
     $css = '.body { color: blue; }';
 
-    $data = [ 'component' => 'Baz', 'props' => [], 'rootView' => 'foo.bar', 'viewData' => [] ];
+    $html = json_encode( [ 'body' => '<div>Hello World</div>' ] );
 
-    $inertia = json_encode([ 'body' => '<div>Hello World</div>' ]);
 
     File::shouldReceive( 'exists' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( true );
 
@@ -258,11 +257,7 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 
     $mock = Mockery::mock( Mailable::class )->makePartial();
 
-    $mock->root( $data[ 'rootView' ] )->view( $data[ 'component' ], [] );
-
-    $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getData' )->andReturn( $data );
-
-    $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getInertia' )->with( $data )->andReturn( $inertia );
+    $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getHtml' )->andReturn( $html );
 
     Storage::shouldReceive( 'put' )->once();
 

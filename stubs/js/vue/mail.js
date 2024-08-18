@@ -1,5 +1,4 @@
 import { createInertiaApp } from '@inertiajs/vue3';
-import * as process from 'process';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 
