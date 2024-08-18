@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" alt="Inertia Mailable Image" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px"  alt="Inertia Mailable Image" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
@@ -124,7 +124,7 @@ INFO  Server running on [http://127.0.0.1:8000].
 
 `> http://127.:8000/render`
 
-<p align="center"><img src="capsules-inertia-mailable-screenshot.png" width="400px" height="265px" alt="Inertia Mailable Screenshot" /></p>
+<p align="center"><img src="capsules-inertia-mailable-screenshot.png" alt="Inertia Mailable Screenshot" /></p>
 
 <br>
 <br>
