@@ -6,6 +6,9 @@ import Table from '/vendor/capsulescodes/inertia-mailable/components/vue/tags/Ta
 
 const props = defineProps( { name : { type : String, required : true } } );
 
+
+const app = import.meta.env.VITE_APP_NAME;
+
 </script>
 
 <template>
@@ -34,7 +37,7 @@ const props = defineProps( { name : { type : String, required : true } } );
 
             <p>Regards,</p>
 
-            <p>Inertia Mailable</p>
+            <p>{{ app }}</p>
 
         </template>
 

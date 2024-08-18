@@ -12,6 +12,9 @@ interface WelcomeProps
 
 const props = defineProps<WelcomeProps>();
 
+
+const app = import.meta.env.VITE_APP_NAME;
+
 </script>
 
 <template>
@@ -40,7 +43,7 @@ const props = defineProps<WelcomeProps>();
 
             <p>Regards,</p>
 
-            <p>Inertia Mailable</p>
+            <p>{{ app }}</p>
 
         </template>
 

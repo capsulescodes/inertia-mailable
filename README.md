@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Vue Mailable" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Inertia Mailable" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
@@ -83,7 +83,8 @@ class InertiaMailableInstalled extends Mailable
 
     public function content() : Content
     {
-        return new Content( view : 'Welcome', props : [ 'name' => $this->name ] );
+-       return new Content( view: 'view.name' );
++       return new Content( view : 'Welcome', props : [ 'name' => $this->name ] );
     }
 
     public function attachments() : array
@@ -114,13 +115,16 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 ```
 php artisan serve
+
+
+INFO  Server running on [http://127.0.0.1:8000].
 ```
 
 <br>
 
 `> http://127.:8000/render`
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Vue Mailable" /></p>
+<p align="center"><img src="capsules-inertia-mailable-screenshot.png" width="400px" height="265px" alt="Inertia Mailable Screenshot" /></p>
 
 <br>
 <br>
