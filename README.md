@@ -44,17 +44,25 @@ npm run build
 
 ## Usage
 
+```
+php artisan make:mail InertiaMailableInstalled.php
+```
+
+<br>
+
 `App\Mails\InertiaMailableInstalled.php`
 
-```php
+```diff
 <?php
 
 namespace App\Mail;
 
-use CapsulesCodes\InertiaMailable\Mail\Mailable;
+- use Illuminate\Mail\Mailable;
++ use CapsulesCodes\InertiaMailable\Mail\Mailable;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
-use CapsulesCodes\InertiaMailable\Mail\Mailables\Content;
+- use Illuminate\Mail\Mailables\Content;
++ use CapsulesCodes\InertiaMailable\Mail\Mailables\Content;
 
 
 class InertiaMailableInstalled extends Mailable
