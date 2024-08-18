@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" width="400px" height="265px" alt="Inertia Mailable" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" alt="Inertia Mailable Image" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
