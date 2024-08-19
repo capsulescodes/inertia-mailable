@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" height="265px"  alt="Inertia Mailable Image" /></p>
+<p align="center"><img src="capsules-inertia-mailable-image.png" height="265px" alt="Inertia Mailable Image" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
@@ -13,13 +13,16 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 ## Installation
 
-1. Install package and publish expected inertia mailable file [ vue-js, vue-ts ]
+1. Install package and publish expected inertia mailable file [ `vue-js`, `vue-ts`]
 
 ```bash
 composer require capsulescodes/inertia-mailable
 
 php artisan vendor:publish --tag=inertia-mailable-vue-js
 ```
+<br> This will publish two files :
+    - `resources/js/mail.js` base Inertia file
+    - `resources/js/mails/Welcome.vue` Example Vue Component.
 
 <br>
 
@@ -131,9 +134,9 @@ INFO  Server running on [http://127.0.0.1:8000].
 
 ## Supported Frameworks
 
-- Vue Mailable supports Vue.
-- Vue Mailable supports Vue with Typescript.
-- Vue Mailable supports Vue with Tailwindcss.
+- Inertia Mailable supports Vue.
+- Inertia Mailable supports Vue with Typescript.
+- Inertia Mailable supports Vue with Tailwindcss.
 
 <br>
 
