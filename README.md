@@ -20,9 +20,12 @@ composer require capsulescodes/inertia-mailable
 
 php artisan vendor:publish --tag=inertia-mailable-vue-js
 ```
-<br> This will publish two files :
+
+<br>
+
+It publishes two files :
     - `resources/js/mail.js` base Inertia file
-    - `resources/js/mails/Welcome.vue` Example Vue Component.
+    - `resources/js/mails/Welcome.vue` example Vue Component.
 
 <br>
 
@@ -106,12 +109,9 @@ class InertiaMailableInstalled extends Mailable
 
 use Illuminate\Support\Facades\Route;
 use App\Mail\InertiaMailableInstalled;
-use Illuminate\Support\Facades\Mail;
 
 
 Route::get( '/render', fn() => ( new InertiaMailableInstalled( "Mailable World" ) )->render() );
-
-Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new InertiaMailableInstalled( "Mailable World" ) ); } );
 ```
 
 <br>
@@ -125,9 +125,28 @@ INFO  Server running on [http://127.0.0.1:8000].
 
 <br>
 
-`> http://127.:8000/render`
+`> http://127.0.0.1:8000/render`
 
 <p align="center"><img src="capsules-inertia-mailable-screenshot.png" alt="Inertia Mailable Screenshot" /></p>
+
+<br>
+
+You are now ready to send.
+
+<br>
+
+`routes/web.php`
+
+```php
+<?php
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InertiaMailableInstalled;
+
+
+Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new InertiaMailableInstalled( "Mailable World" ) ); } );
+```
 
 <br>
 <br>
@@ -137,6 +156,15 @@ INFO  Server running on [http://127.0.0.1:8000].
 - Inertia Mailable supports Vue.
 - Inertia Mailable supports Vue with Typescript.
 - Inertia Mailable supports Vue with Tailwindcss.
+
+<br>
+
+## Options
+
+1. SSR
+
+2. Publish CSS file and Blade file
+
 
 <br>
 
