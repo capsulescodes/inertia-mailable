@@ -12,11 +12,11 @@ const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
 <template>
 
-    <Table class="body" align="center">
+    <Table align="center">
 
         <Header />
 
-        <Table class="p-8 shadow bg-primary-white" align="center" width="570">
+        <Table class="p-8 shadow bg-white" align="center" width="570">
 
             <slot />
 

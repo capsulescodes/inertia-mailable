@@ -11,6 +11,11 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 <br>
 
+> [!NOTE]
+> This package is currently designed for Laravel and Vue users and is still in development.
+
+<br>
+
 ## Installation
 
 1. Install package and publish expected inertia mailable file [ `vue-js`, `vue-ts` ]
@@ -147,6 +152,7 @@ use App\Mail\InertiaMailableInstalled;
 
 Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new InertiaMailableInstalled( "Mailable World" ) ); } );
 ```
+- replace 'example@example.com' with the desired email address in `routes/web.php`and `App\Mail\InertiaMailableInstalled.php`.
 
 <br>
 <br>

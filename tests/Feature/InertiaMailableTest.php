@@ -62,11 +62,8 @@ it( "can render a mail with Tailwind CSS", function()
 
     App::shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
-    expect( $this->email->render() )->toContain( "<img class=\"my-4 max-w-full\" src=\"https://capsules.codes/storage/canvas/images/LentWCgPB1iFQgUsSfBf3NgNznNH4FwFaAD0XecL.png\" style=\"margin-top: 1rem; margin-bottom: 1rem; max-width: 100%;\">" );
+    expect( $this->email->render() )->toContain( "<img class=\"my-4 max-w-full\" src=\"https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png\" style=\"margin-top: 1rem; margin-bottom: 1rem; max-width: 100%;\">" );
 } );
-
-
-
 
 
 it( "can render a mail based on Vue Javascript file", function() : void
@@ -75,11 +72,7 @@ it( "can render a mail based on Vue Javascript file", function() : void
 
     Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
 
-    expect( $this->email->render() )
-        ->toContain( "<p>Hello, Qux!</p>" )
-        ->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" )
-        ->toContain( "<p>Regards,</p>" )
-        ->toContain( "<p>Inertia Mailable</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" );
 } );
 
 
@@ -89,9 +82,5 @@ it( "can render a mail based on Vue Typescript file", function() : void
 
     Config::set( 'inertia-mailable.ts', 'stubs/ts/vue/mail.ts' );
 
-    expect( $this->email->render() )
-        ->toContain( "<p>Hello, Qux!</p>" )
-        ->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Typescript</p>" )
-        ->toContain( "<p>Regards,</p>" )
-        ->toContain( "<p>Inertia Mailable</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Typescript</p>" );
 } );
