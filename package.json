@@ -2,7 +2,8 @@
     "type" : "module",
     "private" : true,
     "scripts" : {
-        "build" : "vite build"
+        "build" : "vite build",
+        "ssr" : "vite build --config=vite.ssr.config.js"
     },
     "devDependencies" : {
         "@inertiajs/vue3" : "^1.2.0",

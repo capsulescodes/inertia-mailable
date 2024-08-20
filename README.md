@@ -18,7 +18,7 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 ## Installation
 
-1. Install package and publish expected inertia mailable file [ `vue-js`, `vue-ts` ]
+**1. Install package and publish expected inertia mailable file** [ `vue-js`, `vue-ts` ]
 
 ```bash
 composer require capsulescodes/inertia-mailable
@@ -34,7 +34,7 @@ It publishes two files :
 
 <br>
 
-2. Add filename into vite config's input array
+**2. Add filename into vite config's input array**
 
 ```javascript
 plugins : [
@@ -45,7 +45,7 @@ plugins : [
 
 <br>
 
-3. Build files
+**3. Build files**
 
 ```
 npm run build
@@ -167,9 +167,51 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 ## Options
 
-1. SSR
+**1. Compile files in `bootstrap/ssr` directory**
 
-2. Add a custom CSS file or Blade file
+If you want the compiled files to be stored in the `bootstrap/ssr` directory :
+
+```diff
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
+
+
+export default defineConfig( {
+-    plugins : [ laravel( { input : [ 'resources/css/app.css', 'resources/js/app.js', 'resources/js/mail.js' ], ssr : 'resources/js/ssr.js' } ), vue() ],
++    plugins : [ laravel( [] ), vue() ],
+    resolve : { alias : { '~': '/resources/js' } },
++    build : {
++        manifest : 'public/build/manifest.json',
++        rollupOptions : {
++            input : [ 'resources/css/app.css', 'resources/js/app.js', 'resources/js/ssr.js', 'resources/js/mail.js' ],
++            output : {
++                assetFileNames : () => 'public/build/assets/[name]-[hash][extname]',
++                entryFileNames : chunkInfo => chunkInfo.name.includes( 'ssr' ) || chunkInfo.name.includes( 'mail' ) ? 'bootstrap/ssr/[name].js' : 'public/build/[name].js',
++                chunkFileNames : () => 'public/build/assets/[name]-[hash].js',
++                dir : './'
++            }
++        }
++    }
+} );
+```
+
+<br>
+
+`config.inertia-mailable.php`
+```
+<?php
+
+return [
+
+    'build' => base_path(),
+
+];
+```
+
+<br>
+
+**2. Add a custom CSS file or Blade file**
 
 If you want to modify the current css and blade files, publish the templates and modify the paths in the config file
 
@@ -177,6 +219,7 @@ If you want to modify the current css and blade files, publish the templates and
 php artisan vendor:publish --tag=inertia-mailable-config
 
 php artisan vendor:publish --tag=inertia-mailable-css
+
 php artisan vendor:publish --tag=inertia-mailable-blade
 ```
 

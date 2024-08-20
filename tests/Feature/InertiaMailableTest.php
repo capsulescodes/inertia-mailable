@@ -44,7 +44,7 @@ it( "returns an exception if manifest is not found", function() : void
 
 it( "returns an exception if file not found in manifest", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
+    Config::set( 'inertia-mailable.manifest', realpath( dirname( __DIR__ ) . '/Fixtures/public/build/manifest.json' ) );
 
     Config::set( 'inertia-mailable.js', 'corge' );
 
@@ -54,9 +54,13 @@ it( "returns an exception if file not found in manifest", function() : void
 
 it( "can render a mail with Tailwind CSS", function()
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
+    $path = realpath( dirname( __DIR__ ) . '/Fixtures/public/build' );
+
+    Config::set( 'inertia-mailable.manifest', "$path/manifest.json" );
 
     Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
+
+    Config::set( 'inertia-mailable.build', $path );
 
     App::shouldReceive( 'basePath' )->with()->andReturn( getcwd() );
 
@@ -66,11 +70,28 @@ it( "can render a mail with Tailwind CSS", function()
 } );
 
 
-it( "can render a mail based on Vue Javascript file", function() : void
+it( "can render a mail in server side rendering", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
+    Config::set( 'inertia-mailable.manifest', realpath( dirname( __DIR__ ) . '/Fixtures/public/build/manifest.json' ) );
 
     Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
+
+    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/bootstrap/ssr' ) );
+
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" );
+} );
+
+
+
+it( "can render a mail based on Vue Javascript file", function() : void
+{
+    $path = realpath( dirname( __DIR__ ) . '/Fixtures/public/build' );
+
+    Config::set( 'inertia-mailable.manifest', "$path/manifest.json" );
+
+    Config::set( 'inertia-mailable.js', 'stubs/js/vue/mail.js' );
+
+    Config::set( 'inertia-mailable.build', $path );
 
     expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" );
 } );
@@ -78,9 +99,13 @@ it( "can render a mail based on Vue Javascript file", function() : void
 
 it( "can render a mail based on Vue Typescript file", function() : void
 {
-    Config::set( 'inertia-mailable.build', realpath( dirname( __DIR__ ) . '/Fixtures/build' ) );
+    $path = realpath( dirname( __DIR__ ) . '/Fixtures/public/build' );
+
+    Config::set( 'inertia-mailable.manifest', "$path/manifest.json" );
 
     Config::set( 'inertia-mailable.ts', 'stubs/ts/vue/mail.ts' );
+
+    Config::set( 'inertia-mailable.build', $path );
 
     expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Typescript</p>" );
 } );

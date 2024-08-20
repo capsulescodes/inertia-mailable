@@ -11,5 +11,5 @@
     "autoload-dev" : { "psr-4" : { "CapsulesCodes\\InertiaMailable\\Tests\\" : "tests/" } },
     "extra" : { "laravel" : { "providers" : [ "CapsulesCodes\\InertiaMailable\\Providers\\InertiaMailableServiceProvider" ] } },
     "config" : { "optimize-autoloader" : true, "allow-plugins" : { "pestphp/pest-plugin" : true } },
-    "scripts": { "test" : [ "npm run build", "vendor/bin/pest" ] }
+    "scripts": { "test" : [ "npm run build", "npm run ssr", "vendor/bin/pest" ] }
 }

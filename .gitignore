@@ -4,4 +4,5 @@ node_modules
 composer.lock
 package-lock.json
 .flint.local.*
-tests/Fixtures/build
+tests/Fixtures/public
+tests/Fixtures/bootstrap

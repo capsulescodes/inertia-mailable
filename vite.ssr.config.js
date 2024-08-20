@@ -8,7 +8,7 @@ export default defineConfig( {
     resolve : { alias : { '/vendor/capsulescodes/inertia-mailable/components' : '/components' } },
     build : {
         target : 'esnext',
-        outDir : 'tests/Fixtures/public/build',
+        outDir : 'tests/Fixtures/bootstrap/ssr',
         emptyOutDir : true,
         manifest : true,
         rollupOptions : {
@@ -31,7 +31,7 @@ function manifest()
         apply : 'build',
         writeBundle()
         {
-            const path = 'tests/Fixtures/public/build';
+            const path = 'tests/Fixtures/bootstrap/ssr';
             fs.renameSync( `${path}/.vite/manifest.json`, `${path}/manifest.json` );
             fs.rmdirSync( `${path}/.vite` );
         }

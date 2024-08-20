@@ -8,3 +8,4 @@ phpunit.xml export-ignore
 package.json
 tsconfig.json
 vite.config.js
+vite.ssr.config.js

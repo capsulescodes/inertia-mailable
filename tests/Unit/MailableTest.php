@@ -1,7 +1,7 @@
 <?php
 
 use CapsulesCodes\InertiaMailable\Mail\Mailable;
-
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\App;
@@ -118,11 +118,9 @@ it( 'throws an exception when the manifest file does not exist', function() : vo
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.build' )->andReturn( 'build' );
+    $path = 'build/manifest.json';
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.build' )->andReturn( 'build' );
-
-    $path = "build/manifest.json";
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
 
     File::shouldReceive( 'exists' )->with( $path )->andReturn( false );
 
@@ -134,9 +132,9 @@ it( 'throws an exception when the file is not found in the manifest', function()
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.build' )->andReturn( 'build' );
+    $path = 'build/manifest.json';
 
-    $path = "build/manifest.json";
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
 
     File::shouldReceive( 'exists' )->with( $path )->andReturn( true );
 
@@ -154,9 +152,9 @@ it( 'returns the expected output when parsing Inertia components', function () :
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.build' )->andReturn( 'build' );
+    $path = 'build/manifest.json';
 
-    $path = "build/manifest.json";
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
 
     File::shouldReceive( 'exists' )->with( $path )->andReturn( true );
 
@@ -248,7 +246,6 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 
     $html = json_encode( [ 'body' => '<div>Hello World</div>' ] );
 
-
     File::shouldReceive( 'exists' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( true );
 
     File::shouldReceive( 'get' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( $css );
@@ -259,19 +256,11 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 
     $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getHtml' )->andReturn( $html );
 
-    Storage::shouldReceive( 'put' )->once();
-
-    Storage::shouldReceive( 'path' )->andReturn( '/fake/path/to/temp/file' );
-
     Process::shouldReceive( 'path' )->andReturnSelf();
 
     Process::shouldReceive( 'run' )->andReturnSelf();
 
     Process::shouldReceive( 'output' )->andReturn( $css );
-
-    Storage::shouldReceive( 'has' )->once()->andReturn( true );
-
-    Storage::shouldReceive( 'delete' )->once();
 
     expect( $mock->getCss() )->toBe( $css );
 } );

@@ -94,9 +94,7 @@ class Mailable extends Base
     {
         if( ! isset( $data[ 'component' ] ) ) throw new Exception( "Component [{$data[ 'component' ]}] not found." );
 
-        $build = Config::get( 'inertia-mailable.build' );
-
-        $path = "$build/manifest.json";
+        $path = Config::get( 'inertia-mailable.manifest' );
 
         if( ! File::exists( $path ) ) throw new Exception( "Vite manifest not found." );
 
@@ -105,6 +103,8 @@ class Mailable extends Base
         if( ! Arr::has( $manifest, Config::get( 'inertia-mailable.js' ) ) && ! Arr::has( $manifest, Config::get( 'inertia-mailable.ts' ) ) ) throw new Exception( "File not found in manifest. Please run 'npm run build' or publish the preferred file." );
 
         $buffer = Arr::has( $manifest, Config::get( 'inertia-mailable.js' ) ) ? Config::get( 'inertia-mailable.js' ) : Config::get( 'inertia-mailable.ts' );
+
+        $build = Config::get( 'inertia-mailable.build' );
 
         $file = "$build/{$manifest[ $buffer ][ 'file' ]}";
 
@@ -137,15 +137,26 @@ class Mailable extends Base
 
         if( File::exists( App::basePath( 'node_modules/.bin/tailwind' ) ) )
         {
-            $path = "public/" . Str::random( 40 );
+            $path = 'framework/mails';
 
-            Storage::put( $path, html_entity_decode( $this->getHtml() ) );
+            $disk = Storage::build( [ 'driver' => 'local', 'root' => storage_path() ] );
+
+            if( ! $disk->exists( $path ) )
+            {
+                $disk->makeDirectory( $path );
+
+                $disk->put( "{$path}/.gitignore", "*\n!.gitignore" );
+            }
+
+            $filename = "$path/" . Str::random( 40 );
+
+            $disk->put( $filename , html_entity_decode( $this->getHtml() ) );
 
             $file = isset( $css ) ? Config::get( 'inertia-mailable.css' ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
 
-            $css = Process::path( App::basePath() )->run( [ App::basePath( 'node_modules/.bin/tailwind' ), "-i", $file, "--content", Storage::path( $path ) ] )->output();
+            $css = Process::path( App::basePath() )->run( [ App::basePath( 'node_modules/.bin/tailwind' ), "-i", $file, "--content", $disk->path( $filename ) ] )->output();
 
-            if( Storage::has( $path ) ) Storage::delete( $path );
+            if( $disk->has( $filename ) ) $disk->delete( $filename );
         }
 
         return isset( $css ) ? preg_replace( '/\/\*[\s\S]*?\*\//', '', $css ) : null;

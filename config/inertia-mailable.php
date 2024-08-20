@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\App;
-
-
 return [
 
     /*
@@ -18,14 +15,25 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Build path
+    | Manifest  path
+    |--------------------------------------------------------------------------
+    |
+    | The path where the manifest is located.
+    |
+    */
+
+    'manifest' => public_path( 'build/manifest.json' ),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Built resources path
     |--------------------------------------------------------------------------
     |
     | The path where the built resources are located.
     |
     */
 
-    'build' => App::publicPath( 'build' ),
+    'build' => public_path( 'build' ),
 
     /*
     |--------------------------------------------------------------------------
@@ -49,7 +57,7 @@ return [
 
     'ts' => 'resources/ts/mail.ts',
 
-        /*
+    /*
     |--------------------------------------------------------------------------
     | CSS filename
     |--------------------------------------------------------------------------
@@ -58,5 +66,5 @@ return [
     |
     */
 
-    'css' => App::resourcePath( 'css/mail.css' )
+    'css' => resource_path( 'css/mail.css' )
 ];
