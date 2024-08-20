@@ -159,9 +159,13 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 ## Supported Frameworks
 
-- Inertia Mailable supports Vue.
-- Inertia Mailable supports Vue with Typescript.
-- Inertia Mailable supports Vue with Tailwindcss.
+- [x] Inertia mailable supports Laravel.
+
+<br>
+
+- [x] Inertia Mailable supports Vue.
+- [x] Inertia Mailable supports Vue with Typescript.
+- [x] Inertia Mailable supports Vue with Tailwindcss.
 
 <br>
 
