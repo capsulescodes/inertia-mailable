@@ -1,5 +1,5 @@
 
-<p align="center"><img src="capsules-inertia-mailable-image.png" height="265px" alt="Inertia Mailable Image" /></p>
+<p align="center"><img src="art/capsules-inertia-mailable-image.png" height="265px" alt="Inertia Mailable Image" /></p>
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
@@ -13,7 +13,7 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 ## Installation
 
-1. Install package and publish expected inertia mailable file [ `vue-js`, `vue-ts`]
+1. Install package and publish expected inertia mailable file [ `vue-js`, `vue-ts` ]
 
 ```bash
 composer require capsulescodes/inertia-mailable
@@ -127,7 +127,7 @@ INFO  Server running on [http://127.0.0.1:8000].
 
 `> http://127.0.0.1:8000/render`
 
-<p align="center"><img src="capsules-inertia-mailable-screenshot.png" alt="Inertia Mailable Screenshot" /></p>
+<p align="center"><img src="art/capsules-inertia-mailable-screenshot.png" alt="Inertia Mailable Screenshot" /></p>
 
 <br>
 
@@ -163,8 +163,16 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 1. SSR
 
-2. Publish CSS file and Blade file
+2. Add a custom CSS file or Blade file
 
+If you want to modify the current css and blade files, publish the templates and modify the paths in the config file
+
+```
+php artisan vendor:publish --tag=inertia-mailable-config
+
+php artisan vendor:publish --tag=inertia-mailable-css
+php artisan vendor:publish --tag=inertia-mailable-blade
+```
 
 <br>
 

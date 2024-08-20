@@ -14,6 +14,7 @@ const props = defineProps<WelcomeProps>();
 
 
 const app = import.meta.env.VITE_APP_NAME;
+const image = 'https://github.com/capsulescodes/inertia-mailable/blob/e9fdf63a970db6ef52a6eec02fcfd0dbcd80fd48/capsules-inertia-mailable-logotype-background.png';
 
 </script>
 
@@ -33,7 +34,7 @@ const app = import.meta.env.VITE_APP_NAME;
 
                     <Table>
 
-                        <img class="my-4 max-w-full" src="https://capsules.codes/storage/canvas/images/LentWCgPB1iFQgUsSfBf3NgNznNH4FwFaAD0XecL.png">
+                        <img class="my-4 max-w-full" v-bind:src="image">
 
                     </Table>
 
