@@ -15,47 +15,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Manifest  path
+    | Server Side Rendering built resources path
     |--------------------------------------------------------------------------
     |
     | The path where the manifest is located.
     |
     */
 
-    'manifest' => public_path( 'build/manifest.json' ),
+    'ssr' => base_path( 'bootstrap/ssr' ),
 
     /*
     |--------------------------------------------------------------------------
-    | Built resources path
+    | Inertia Javascript or Typescript filename
     |--------------------------------------------------------------------------
     |
-    | The path where the built resources are located.
+    | The name of the Inertia resource. Default is main.js.
     |
     */
 
-    'build' => public_path( 'build' ),
+    'file' => 'mail.js',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Javascript filename
-    |--------------------------------------------------------------------------
-    |
-    | The path where the Javascript resource is located in the manifest.
-    |
-    */
-
-    'js' => 'resources/js/mail.js',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Typescript filename
-    |--------------------------------------------------------------------------
-    |
-    | The path where the Typescript resource is located in the manifest.
-    |
-    */
-
-    'ts' => 'resources/ts/mail.ts',
 
     /*
     |--------------------------------------------------------------------------

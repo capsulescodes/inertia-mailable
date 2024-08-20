@@ -1,7 +1,6 @@
 <?php
 
 use CapsulesCodes\InertiaMailable\Mail\Mailable;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\App;
@@ -67,7 +66,7 @@ it( "can add props", function() : void
 } );
 
 
-it( "can render mail as html", function() : void
+it( "can render a mail as html", function() : void
 {
     $mailable = Mockery::mock( Mailable::class )->shouldAllowMockingProtectedMethods()->makePartial();
 
@@ -77,7 +76,7 @@ it( "can render mail as html", function() : void
 
     $mailable->shouldReceive( 'getCss' )->andReturn( '.foo{display:block;}' );
 
-    expect( $mailable->render() )->toContain( '<div class="foo" style="display: block;">Hello World</div>' );
+    expect( $mailable->render() )->toContain( '<div style="display: block;">Hello World</div>' );
 } );
 
 
@@ -114,37 +113,15 @@ it( 'throws an exception when the component file does not exist', function() : v
 } );
 
 
-it( 'throws an exception when the manifest file does not exist', function() : void
+
+
+it( 'throws an exception when the file is not found', function() : void
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    $path = 'build/manifest.json';
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.file' )->andReturn( 'foo' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
-
-    File::shouldReceive( 'exists' )->with( $path )->andReturn( false );
-
-    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "Vite manifest not found." );
-} );
-
-
-it( 'throws an exception when the file is not found in the manifest', function() : void
-{
-    $method = $this->reflection->getMethod( 'getInertia' );
-
-    $path = 'build/manifest.json';
-
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
-
-    File::shouldReceive( 'exists' )->with( $path )->andReturn( true );
-
-    File::shouldReceive( 'get' )->with( $path )->andReturn( json_encode( [] ) );
-
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.js' )->andReturn( 'app.js' );
-
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.ts' )->andReturn( null );
-
-    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found in manifest. Please run 'npm run build' or publish the preferred file." );
+    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found. Please run 'npm run build' or publish the preferred file." );
 } );
 
 
@@ -152,19 +129,9 @@ it( 'returns the expected output when parsing Inertia components', function () :
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    $path = 'build/manifest.json';
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.ssr' )->andReturn( 'tests/Fixtures/bootstrap/ssr' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.manifest' )->andReturn( $path );
-
-    File::shouldReceive( 'exists' )->with( $path )->andReturn( true );
-
-    $mock = json_encode([ 'foo.bar' => [ 'file' => 'baz.qux' ] ] );
-
-    File::shouldReceive( 'get' )->with( $path )->andReturn( $mock );
-
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.js' )->andReturn( 'foo.bar' );
-
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.ts' )->andReturn( null );
+    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.file' )->andReturn( 'vue-js.js' );
 
     Process::shouldReceive( 'path' )->with( App::basePath() )->andReturnSelf();
 
@@ -283,4 +250,17 @@ it( "compiles tailwind CSS correctly without comments", function()
     expect( $result )->not->toContain( "/* comment */" );
 
     expect( $result )->toContain( ".body { color: green; }" );
+} );
+
+
+it( "compiles HTML and CSS correctly without classes", function()
+{
+    $css = '.my-4 { margin-top: 10rem; margin-bottom: 10rem; } .max-w-full { max-width: 100%; }';
+
+    $html = '<div class="my-4 max-w-full" >Hello World</div>';
+
+    $method = $this->reflection->getMethod( 'process' );
+
+    expect( $method->invoke( $this->mailable, $html, $css ) )->toContain( "<div style=\"margin-top: 10rem; margin-bottom: 10rem; max-width: 100%;\">Hello World</div" );
+
 } );

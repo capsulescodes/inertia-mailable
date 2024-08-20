@@ -7,7 +7,6 @@ use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Response;
@@ -62,7 +61,7 @@ class Mailable extends Base
 
             $this->ensurePropsAreHydrated();
 
-            return ( new CssToInlineStyles() )->convert( $this->getHtml(), $this->getCss() );
+            return $this->process( $this->getHtml(), $this->getCss() );
         } );
     }
 
@@ -94,19 +93,9 @@ class Mailable extends Base
     {
         if( ! isset( $data[ 'component' ] ) ) throw new Exception( "Component [{$data[ 'component' ]}] not found." );
 
-        $path = Config::get( 'inertia-mailable.manifest' );
+        $file = Config::get( 'inertia-mailable.ssr' ) . '/' . Config::get( 'inertia-mailable.file' );
 
-        if( ! File::exists( $path ) ) throw new Exception( "Vite manifest not found." );
-
-        $manifest = json_decode( File::get( $path ), true );
-
-        if( ! Arr::has( $manifest, Config::get( 'inertia-mailable.js' ) ) && ! Arr::has( $manifest, Config::get( 'inertia-mailable.ts' ) ) ) throw new Exception( "File not found in manifest. Please run 'npm run build' or publish the preferred file." );
-
-        $buffer = Arr::has( $manifest, Config::get( 'inertia-mailable.js' ) ) ? Config::get( 'inertia-mailable.js' ) : Config::get( 'inertia-mailable.ts' );
-
-        $build = Config::get( 'inertia-mailable.build' );
-
-        $file = "$build/{$manifest[ $buffer ][ 'file' ]}";
+        if( ! File::exists( $file ) ) throw new Exception( "File not found. Please run 'npm run build' or publish the preferred file." );
 
         return Process::path( App::basePath() )->run( [ "node", $file, json_encode( $data ) ], function( $type, $output ){ if( $type == 'err' ) throw new Exception( Str::match( '/^.*Error: .*/m', $output ) ); } )->output();
     }
@@ -121,9 +110,12 @@ class Mailable extends Base
         $inertia = $this->getInertia( $data );
 
 
+
         $crawler = new Crawler( $blade );
 
-        $html = Str::replace( $crawler->filter( '#' . Config::get( 'inertia-mailable.inertia' ) )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
+        $id = '#' . Config::get( 'inertia-mailable.inertia' );
+
+        $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
 
         return preg_replace('/>\s+</', '><', html_entity_decode( $html ) );
     }
@@ -160,5 +152,10 @@ class Mailable extends Base
         }
 
         return isset( $css ) ? preg_replace( '/\/\*[\s\S]*?\*\//', '', $css ) : null;
+    }
+
+    protected function process( $html, $css ) : string
+    {
+        return preg_replace( '/\sclass="[^"]*"/i', '',  ( new CssToInlineStyles() )->convert( $html, $css ) );
     }
 }

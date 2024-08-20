@@ -7,8 +7,7 @@ export default defineConfig( {
     plugins : [ vue(), manifest() ],
     resolve : { alias : { '/vendor/capsulescodes/inertia-mailable/components' : '/components' } },
     build : {
-        target : 'esnext',
-        outDir : 'tests/Fixtures/public/build',
+        outDir : 'tests/Fixtures/bootstrap/ssr',
         emptyOutDir : true,
         manifest : true,
         rollupOptions : {
@@ -19,19 +18,19 @@ export default defineConfig( {
             output : {
                 entryFileNames : '[name].js'
             }
-        },
-        ssr : true
+        }
     }
 } );
 
 
 function manifest()
 {
+    const path = 'tests/Fixtures/bootstrap/ssr';
+
     return {
         apply : 'build',
         writeBundle()
         {
-            const path = 'tests/Fixtures/public/build';
             fs.renameSync( `${path}/.vite/manifest.json`, `${path}/manifest.json` );
             fs.rmdirSync( `${path}/.vite` );
         }

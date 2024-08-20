@@ -35,18 +35,25 @@ It publishes two files :
 
 <br>
 
-**2. Add filename into vite config's input array**
+**2. Add filename into vite config's SSR array**
 
 ```javascript
 plugins : [
     laravel( {
-        input : [ ..., 'resources/js/mail.js' ],
+        ssr : [ ..., 'resources/js/mail.js' ],
     } )
 ```
 
 <br>
 
-**3. Build files**
+**3. Add SSR to `build` script and build files**
+
+`package.json`
+```json
+"scripts" : {
+    "build" : "vite build --ssr"
+},
+```
 
 ```bash
 npm run build
@@ -171,52 +178,6 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 <br>
 
 ## Options
-
-**- Compile files in `bootstrap/ssr` directory**
-
-If you want the compiled files to be stored in the `bootstrap/ssr` directory :
-
-```diff
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import vue from '@vitejs/plugin-vue';
-
-
-export default defineConfig( {
--    plugins : [ laravel( { input : [ 'resources/css/app.css', 'resources/js/app.js', 'resources/js/mail.js' ], ssr : 'resources/js/ssr.js' } ), vue() ],
-+    plugins : [ laravel( [] ), vue() ],
-    resolve : { alias : { '~': '/resources/js' } },
-+    build : {
-+        manifest : 'public/build/manifest.json',
-+        rollupOptions : {
-+            input : [ 'resources/css/app.css', 'resources/js/app.js', 'resources/js/ssr.js', 'resources/js/mail.js' ],
-+            output : {
-+                assetFileNames : () => 'public/build/assets/[name]-[hash][extname]',
-+                entryFileNames : chunkInfo => chunkInfo.name.includes( 'ssr' ) || chunkInfo.name.includes( 'mail' ) ? 'bootstrap/ssr/[name].js' : 'public/build/[name].js',
-+                chunkFileNames : () => 'public/build/assets/[name]-[hash].js',
-+                dir : './'
-+            }
-+        }
-+    }
-} );
-```
-
-<br>
-
-
-`config.inertia-mailable.php`
-```php
-<?php
-
-return [
-
-    'build' => base_path(),
-
-];
-```
-
-<br>
-<br>
 
 **- Add a custom css file**
 

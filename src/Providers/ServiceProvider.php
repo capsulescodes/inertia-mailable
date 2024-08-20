@@ -2,11 +2,11 @@
 
 namespace CapsulesCodes\InertiaMailable\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Facades\App;
 
 
-class InertiaMailableServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     public function boot()
     {
