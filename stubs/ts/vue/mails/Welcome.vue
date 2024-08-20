@@ -14,7 +14,7 @@ const props = defineProps<WelcomeProps>();
 
 
 const app = import.meta.env.VITE_APP_NAME;
-const image = 'https://github.com/capsulescodes/inertia-mailable/blob/bee1fee37803a93b9cb35d4e778f5471b8c7455a/art/capsules-inertia-mailable-mail-image.png?raw=true';
+const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png';
 
 </script>
 
