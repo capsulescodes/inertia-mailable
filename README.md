@@ -48,7 +48,7 @@ plugins : [
 
 **3. Build files**
 
-```
+```bash
 npm run build
 ```
 
@@ -56,7 +56,7 @@ npm run build
 
 ## Usage
 
-```
+```bash
 php artisan make:mail InertiaMailableInstalled.php
 ```
 
@@ -122,7 +122,7 @@ Route::get( '/render', fn() => ( new InertiaMailableInstalled( "Mailable World" 
 
 <br>
 
-```
+```bash
 php artisan serve
 
 
@@ -172,7 +172,7 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 ## Options
 
-**1. Compile files in `bootstrap/ssr` directory**
+**- Compile files in `bootstrap/ssr` directory**
 
 If you want the compiled files to be stored in the `bootstrap/ssr` directory :
 
@@ -203,8 +203,9 @@ export default defineConfig( {
 
 <br>
 
+
 `config.inertia-mailable.php`
-```
+```php
 <?php
 
 return [
@@ -215,18 +216,54 @@ return [
 ```
 
 <br>
+<br>
 
-**2. Add a custom CSS file or Blade file**
+**- Add a custom css file**
 
-If you want to modify the current css and blade files, publish the templates and modify the paths in the config file
+If you want to modify the current css file, publish the template and modify the path in the config file
 
-```
-php artisan vendor:publish --tag=inertia-mailable-config
-
+```bash
 php artisan vendor:publish --tag=inertia-mailable-css
+```
 
+<br>
+
+`config.inertia-mailable.php`
+```php
+
+return [
+
+    'css' => resource_path( 'css/custom-css.css' ),
+
+];
+```
+
+<br>
+<br>
+
+**- Add a custom root blade view**
+
+If you want to modify the current blade file, publish the template and modify the path in the config file
+
+```bash
 php artisan vendor:publish --tag=inertia-mailable-blade
 ```
+
+<br>
+
+`App\Mails\InertiaMailableInstalled.php`
+
+```php
+...
+
+public function content() : Content
+{
+    return new Content( root : 'custom-blade-view', view : 'Welcome', props : [ 'name' => $this->name ] );
+}
+
+...
+```
+
 
 <br>
 
