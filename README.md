@@ -18,7 +18,7 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 ## Installation
 
-**1. Install package and publish expected inertia mailable file** [ `vue-js`, `vue-ts` ]
+**1. Install package and publish expected inertia mailable file**
 
 ```bash
 composer require capsulescodes/inertia-mailable
@@ -29,8 +29,9 @@ php artisan vendor:publish --tag=inertia-mailable-vue-js
 <br>
 
 It publishes two files :
-    - `resources/js/mail.js` base Inertia file
-    - `resources/js/mails/Welcome.vue` example Vue Component.
+
+ - `resources/js/mail.js` : base Inertia file
+ - `resources/js/mails/Welcome.vue` : example Vue Component.
 
 <br>
 
