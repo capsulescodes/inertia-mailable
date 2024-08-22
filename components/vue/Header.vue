@@ -12,7 +12,7 @@ const logotype = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailab
 
     <Table class="p-12 text-center">
 
-        <img v-bind:src="logotype" class="w-12 h-12 max-h-12 mb-3" v-bind:alt="name">
+        <img v-bind:src="logotype" class="w-12 max-h-12 mb-3" v-bind:alt="name">
 
         <a v-bind:href="name" class="block text-lg font-bold no-underline text-slate-800" v-text="name" />
 

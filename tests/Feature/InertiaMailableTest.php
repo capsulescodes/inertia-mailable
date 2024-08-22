@@ -62,7 +62,7 @@ it( "can render a mail based on Vue Javascript file", function() : void
 
     Config::set( 'inertia-mailable.file', 'vue-js.js' );
 
-    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Javascript</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue</p>" );
 } );
 
 
@@ -72,5 +72,5 @@ it( "can render a mail based on Vue Typescript file", function() : void
 
     Config::set( 'inertia-mailable.file', 'vue-ts.js' );
 
-    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue and Typescript</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue with Typescript</p>" );
 } );
