@@ -15,10 +15,21 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Node path
+    |--------------------------------------------------------------------------
+    |
+    | The node path.
+    |
+    */
+
+    'node' => env( 'NODE_PATH', 'node' ),
+
+    /*
+    |--------------------------------------------------------------------------
     | Server Side Rendering built resources path
     |--------------------------------------------------------------------------
     |
-    | The path where the manifest is located.
+    | The path where the server side resources are located.
     |
     */
 
@@ -26,15 +37,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Inertia Javascript or Typescript filename
+    | Inertia filename
     |--------------------------------------------------------------------------
     |
-    | The name of the Inertia resource. Default is main.js.
+    | The name of the Inertia resource.
     |
     */
 
     'file' => 'mail.js',
-
 
     /*
     |--------------------------------------------------------------------------

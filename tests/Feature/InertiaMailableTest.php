@@ -48,9 +48,8 @@ it( "can render a mail with Tailwind CSS", function()
 
     Config::set( 'inertia-mailable.file', 'vue-js.js' );
 
-    App::shouldReceive( 'basePath' )->with()->andReturn( getcwd() );
-
-    App::shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
+    App::shouldReceive( 'basePath' )->with()->andReturn( getcwd() )
+        ->shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
     expect( $this->email->render() )->toContain( "<img src=\"https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png\" style=\"margin-top: 1rem; margin-bottom: 1rem; max-width: 100%;\">" );
 } );

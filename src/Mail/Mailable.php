@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Response;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Closure;
 use Exception;
 
 
@@ -61,7 +62,7 @@ class Mailable extends Base
 
             $this->ensurePropsAreHydrated();
 
-            return $this->process( $this->getHtml(), $this->getCss() );
+            return $this->convert( $this->getHtml(), $this->getCss() );
         } );
     }
 
@@ -97,7 +98,10 @@ class Mailable extends Base
 
         if( ! File::exists( $file ) ) throw new Exception( "File not found. Please run 'npm run build' or publish the preferred file." );
 
-        return Process::path( App::basePath() )->run( [ "node", $file, json_encode( $data ) ], function( $type, $output ){ if( $type == 'err' ) throw new Exception( Str::match( '/(Error:.*|\\[Vue warn\\]:.*)/m', $output ) ); } )->output();
+
+        $callback = function( $type, $output ){ if( $type == 'err' ) throw new Exception( Str::match( '/(Error:.*|\\[Vue warn\\]:.*)/m', $output ) ); };
+
+        return $this->process( [ $file, json_encode( $data ) ], $callback );
     }
 
     protected function getHtml() : string
@@ -107,17 +111,18 @@ class Mailable extends Base
 
         $blade = Response::view( $data[ 'rootView' ], [ 'page' => $data ] )->getContent();
 
-        $inertia = $this->getInertia( $data );
-
+        $inertia = json_decode( $this->getInertia( $data ), true )[ 'body' ];
 
 
         $crawler = new Crawler( $blade );
 
         $id = '#' . Config::get( 'inertia-mailable.inertia' );
 
-        $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
+        $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), $inertia, $crawler->first()->outerHtml() );
 
-        return preg_replace('/>\s+</', '><', html_entity_decode( $html ) );
+        $this->html = preg_replace('/>\s+</', '><', html_entity_decode( $html ) );
+
+        return $this->html;
     }
 
     protected function getCss() : string | null
@@ -142,11 +147,15 @@ class Mailable extends Base
 
             $filename = "$path/" . Str::random( 40 );
 
-            $disk->put( $filename , html_entity_decode( $this->getHtml() ) );
+            $disk->put( $filename , $this->html );
+
 
             $file = isset( $css ) ? Config::get( 'inertia-mailable.css' ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
 
-            $css = Process::path( App::basePath() )->run( [ App::basePath( 'node_modules/.bin/tailwind' ), "-i", $file, "--content", $disk->path( $filename ) ] )->output();
+            $tailwind = App::basePath( 'node_modules/.bin/tailwind' );
+
+            $css = $this->process( [ $tailwind, "-i", $file, "--content", $disk->path( $filename ) ] );
+
 
             if( $disk->has( $filename ) ) $disk->delete( $filename );
         }
@@ -154,8 +163,23 @@ class Mailable extends Base
         return isset( $css ) ? preg_replace( '/\/\*[\s\S]*?\*\//', '', $css ) : null;
     }
 
-    protected function process( $html, $css ) : string
+
+    private function convert( $html, $css ) : string
     {
         return preg_replace( '/\sclass="[^"]*"/i', '',  ( new CssToInlineStyles() )->convert( $html, $css ) );
+    }
+
+    private function process( array $command, Closure | null $callback = null ) : string
+    {
+        try
+        {
+            $node = Config::get( 'inertia-mailable.node' );
+
+            return Process::run( [ $node, ...$command ], $callback )->output();
+        }
+        catch( Exception $exception )
+        {
+            throw new Exception( "Node not found. Please update the node path." );
+        }
     }
 }
