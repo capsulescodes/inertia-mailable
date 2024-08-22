@@ -51,7 +51,7 @@ plugins : [
 `package.json`
 ```json
 "scripts" : {
-    "build" : "vite build --ssr"
+    "build" : "vite build && vite build --ssr"
 },
 ```
 
