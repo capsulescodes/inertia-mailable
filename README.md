@@ -227,9 +227,9 @@ public function content() : Content
 
 <br>
 
-**- Indicate the real path of Node**
+**- Specify the actual path to node**
 
-If you need to idicate the real path of node, an environment variable is dedicated to it.
+If you need to specify the actual path to node, there is a dedicated environment variable for it.
 
 `.env`
 
