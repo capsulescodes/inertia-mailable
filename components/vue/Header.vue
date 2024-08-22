@@ -4,7 +4,7 @@ import Table from './tags/Table.vue';
 
 
 const name = import.meta.env.VITE_APP_NAME;
-const logotype = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-logotype-background.png';
+const logotype = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-logotype.png';
 
 </script>
 
