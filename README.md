@@ -225,6 +225,18 @@ public function content() : Content
 ...
 ```
 
+<br>
+
+**- Indicate the real path of Node**
+
+If you need to idicate the real path of node, an environment variable is dedicated to it.
+
+`.env`
+
+```
+NODE_PATH=path/to/node
+```
+
 
 <br>
 
