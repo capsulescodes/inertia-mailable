@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'inertia' => 'app',
+    'id' => 'app',
 
     /*
     |--------------------------------------------------------------------------
@@ -26,34 +26,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Server Side Rendering built resources path
+    | Inertia path
     |--------------------------------------------------------------------------
     |
-    | The path where the server side resources are located.
-    |
-    */
-
-    'ssr' => base_path( 'bootstrap/ssr' ),
-
-    /*
-    |--------------------------------------------------------------------------
-    | Inertia filename
-    |--------------------------------------------------------------------------
-    |
-    | The name of the Inertia resource.
+    | The path where the Inertia resource is located.
     |
     */
 
-    'file' => 'mail.js',
+    'inertia' => 'bootstrap/ssr/mail.js',
 
     /*
     |--------------------------------------------------------------------------
-    | CSS filename
+    | CSS path
     |--------------------------------------------------------------------------
     |
     | The path where the CSS resource is located.
     |
     */
 
-    'css' => resource_path( 'css/mail.css' )
+    'css' => 'resources/css/mail.css'
 ];

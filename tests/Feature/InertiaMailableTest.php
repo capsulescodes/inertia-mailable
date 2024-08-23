@@ -38,17 +38,18 @@ it( "returns an exception if file not found", function() : void
 {
     Config::set( 'inertia-mailable.file', 'corge' );
 
-    expect( fn() => $this->email->render() )->toThrow( Exception::class, "File not found. Please run 'npm run build' or publish the preferred file." );
+    $file = Config::get( 'inertia-mailable.inertia' );
+
+    expect( fn() => $this->email->render() )->toThrow( Exception::class, "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
 } );
 
 
 it( "can render a mail with Tailwind CSS", function()
 {
-    Config::set( 'inertia-mailable.ssr', realpath( dirname( __DIR__ ) . '/Fixtures/bootstrap/ssr' ) );
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/vue-js.js' );
 
-    Config::set( 'inertia-mailable.file', 'vue-js.js' );
-
-    App::shouldReceive( 'basePath' )->with()->andReturn( getcwd() )
+    App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) )
+        ->shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( 'stubs/css/mail.css' )
         ->shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
     expect( $this->email->render() )->toContain( "<img src=\"https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png\" style=\"margin-top: 1rem; margin-bottom: 1rem; max-width: 100%;\">" );
@@ -57,9 +58,11 @@ it( "can render a mail with Tailwind CSS", function()
 
 it( "can render a mail based on Vue Javascript file", function() : void
 {
-    Config::set( 'inertia-mailable.ssr', realpath( dirname( __DIR__ ) . '/Fixtures/bootstrap/ssr' ) );
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/vue-js.js' );
 
-    Config::set( 'inertia-mailable.file', 'vue-js.js' );
+    App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) )
+        ->shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( 'stubs/css/mail.css' )
+        ->shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
     expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue</p>" );
 } );
@@ -67,9 +70,11 @@ it( "can render a mail based on Vue Javascript file", function() : void
 
 it( "can render a mail based on Vue Typescript file", function() : void
 {
-    Config::set( 'inertia-mailable.ssr', realpath( dirname( __DIR__ ) . '/Fixtures/bootstrap/ssr' ) );
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/vue-ts.js' );
 
-    Config::set( 'inertia-mailable.file', 'vue-ts.js' );
+    App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) )
+        ->shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( 'stubs/css/mail.css' )
+        ->shouldReceive( 'basePath' )->with( 'node_modules/.bin/tailwind' )->andReturn( 'node_modules/.bin/tailwind' );
 
     expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue with Typescript</p>" );
 } );

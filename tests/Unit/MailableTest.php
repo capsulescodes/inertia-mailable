@@ -114,9 +114,11 @@ it( 'throws an exception when the file is not found', function() : void
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.file' )->andReturn( 'foo' );
+    Config::set( 'inertia-mailable.inertia', 'foo' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found. Please run 'npm run build' or publish the preferred file." );
+    $file = Config::get( 'inertia-mailable.inertia' );
+
+    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
 } );
 
 
@@ -124,9 +126,9 @@ it( 'throws an exception when node is not found', function() : void
 {
     $method = $this->reflection->getMethod( 'process' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.node' )->andReturn( 'foo' );
+    Config::set( 'inertia-mailable.node', 'foo' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->tothrow( Exception::class, "Node not found. Please update the node path." );
+    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->tothrow( Exception::class );
 } );
 
 
@@ -146,12 +148,11 @@ it( 'returns the expected output when parsing Inertia components', function () :
 {
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.ssr' )->andReturn( 'tests/Fixtures/bootstrap/ssr' );
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.file' )->andReturn( 'vue-js.js' );
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/vue-js.js' );
 
-    Process::shouldReceive( 'path' )->with( App::basePath() )->andReturnSelf()
-        ->shouldReceive( 'run' )->andReturnSelf()
-        ->shouldReceive( 'output' )->andReturn( '<div>Hello World</div>' );
+    App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) );
+
+    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'output' )->andReturn( '<div>Hello World</div>' );
 
     expect( $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->toBe( '<div>Hello World</div>' );
 } );
@@ -180,7 +181,7 @@ it( 'generates the expected HTML', function() : void
 
     $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getInertia' )->with( $data )->andReturn( $inertia );
 
-    Config::partialMock()->shouldReceive( 'get' )->with( 'inertia-mailable.inertia' )->andReturn( $id );
+    Config::set( 'inertia-mailable.id', $id );
 
     $crawler = new Crawler( $blade );
 
@@ -210,8 +211,8 @@ it( 'returns CSS when the CSS file exists', function()
 
     $method = $this->reflection->getMethod( 'getCss' );
 
-    File::shouldReceive( 'exists' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( true )
-        ->shouldReceive( 'get' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( $css )
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
+        ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( $css )
         ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( false );
 
     expect( $method->invoke( $this->mailable, [] ) )->toBe( $css );
@@ -222,8 +223,8 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 {
     $css = '.body { color: blue; }';
 
-    File::shouldReceive( 'exists' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( true )
-        ->shouldReceive( 'get' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( $css )
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
+        ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( $css )
         ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( true );
 
     $disk = Mockery::mock();
@@ -249,7 +250,7 @@ it( "compiles tailwind CSS correctly without comments", function()
 {
     $css = "/* comment */ .body { color: green; }";
 
-    File::shouldReceive( 'exists' )->with( Config::get( 'inertia-mailable.css' ) )->andReturn( true )
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
         ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( false )
         ->shouldReceive( 'get' )->with( App::basePath( 'resources/css/mail.css' ) )->andReturn( $css );
 

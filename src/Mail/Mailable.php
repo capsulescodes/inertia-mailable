@@ -94,14 +94,13 @@ class Mailable extends Base
     {
         if( ! isset( $data[ 'component' ] ) ) throw new Exception( "Component [{$data[ 'component' ]}] not found." );
 
-        $file = Config::get( 'inertia-mailable.ssr' ) . '/' . Config::get( 'inertia-mailable.file' );
+        $file = Config::get( 'inertia-mailable.inertia' );
 
-        if( ! File::exists( $file ) ) throw new Exception( "File not found. Please run 'npm run build' or publish the preferred file." );
-
+        if( ! File::exists( App::basePath( $file ) ) ) throw new Exception( "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
 
         $callback = function( $type, $output ){ if( $type == 'err' ) throw new Exception( Str::match( '/(Error:.*|\\[Vue warn\\]:.*)/m', $output ) ); };
 
-        return $this->process( [ $file, json_encode( $data ) ], $callback );
+        return $this->process( [ App::basePath( $file ), json_encode( $data ) ], $callback );
     }
 
     protected function getHtml() : string
@@ -116,7 +115,7 @@ class Mailable extends Base
 
         $crawler = new Crawler( $blade );
 
-        $id = '#' . Config::get( 'inertia-mailable.inertia' );
+        $id = '#' . Config::get( 'inertia-mailable.id' );
 
         $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), $inertia, $crawler->first()->outerHtml() );
 
@@ -127,9 +126,9 @@ class Mailable extends Base
 
     protected function getCss() : string | null
     {
-        if( File::exists( Config::get( 'inertia-mailable.css' ) ) )
+        if( File::exists( App::basePath( Config::get( 'inertia-mailable.css' ) ) ) )
         {
-            $css = File::get( Config::get( 'inertia-mailable.css' ) );
+            $css = File::get( App::basePath( Config::get( 'inertia-mailable.css' ) ) );
         }
 
         if( File::exists( App::basePath( 'node_modules/.bin/tailwind' ) ) )
@@ -150,7 +149,7 @@ class Mailable extends Base
             $disk->put( $filename , $this->html );
 
 
-            $file = isset( $css ) ? Config::get( 'inertia-mailable.css' ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
+            $file = isset( $css ) ? App::basePath( Config::get( 'inertia-mailable.css' ) ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
 
             $tailwind = App::basePath( 'node_modules/.bin/tailwind' );
 
@@ -179,7 +178,7 @@ class Mailable extends Base
         }
         catch( Exception $exception )
         {
-            throw new Exception( "Node not found. Please update the node path." );
+            throw $exception;
         }
     }
 }
