@@ -226,10 +226,11 @@ public function content() : Content
 ```
 
 <br>
+<br>
 
 **- Specify the actual path to node**
 
-If you need to specify the actual path to node, there is a dedicated environment variable for it.
+If you encounter the following error : `Error: proc_open(): posix_spawn() failed: No such file or directory`, you will need to specify the actual path to Node.js. There is a dedicated environment variable for this.
 
 `.env`
 
