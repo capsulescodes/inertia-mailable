@@ -10,9 +10,10 @@ jobs :
       - uses : actions/setup-node@v4
         with :
           node-version : '22'
+      - run : npm run build
       - uses : shivammathur/setup-php@v2
         with :
           php-version : '8.3'
           tools : composer:v2
       - run : composer install
-      - run : composer test
+      - run : ./vendor/bin/pest
