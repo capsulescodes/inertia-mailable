@@ -12,4 +12,4 @@ jobs :
           php-version : '8.3'
           tools : composer:v2
       - run : composer install
-      - run : ./vendor/bin/pest
+      - run : composer test

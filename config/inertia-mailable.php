@@ -29,7 +29,7 @@ return [
     | Inertia path
     |--------------------------------------------------------------------------
     |
-    | The path where the Inertia resource is located.
+    | The path where the built Inertia resource is located.
     |
     */
 
