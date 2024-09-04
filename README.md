@@ -181,7 +181,7 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 **- Add a custom css file**
 
-If you want to modify the current css file, publish the template and modify the path in the config file
+If you want to modify the current css file, publish the template and modify the path in the `inertia-mailable` config file.
 
 ```bash
 php artisan vendor:publish --tag=inertia-mailable-css
@@ -194,7 +194,26 @@ php artisan vendor:publish --tag=inertia-mailable-css
 
 return [
 
-    'css' => resource_path( 'css/custom-css.css' ),
+    'css' => 'resources/css/custom-css.css'
+
+];
+```
+
+<br>
+<br>
+
+**- Add a custom Tailwind config file**
+
+If you want to use a custom tailwind config, modify the path in the `inertia-mailable` config file.
+
+<br>
+
+`config.inertia-mailable.php`
+```php
+
+return [
+
+    'tailwind' => 'custom.tailwind.config.js'
 
 ];
 ```
@@ -204,7 +223,7 @@ return [
 
 **- Add a custom root blade view**
 
-If you want to modify the current blade file, publish the template and modify the path in the config file
+If you want to modify the current blade file, publish the template and modify the path in the `inertia-mailable` config file.
 
 ```bash
 php artisan vendor:publish --tag=inertia-mailable-blade
@@ -232,13 +251,15 @@ public function content() : Content
 
 If you encounter the following error : `Error: proc_open(): posix_spawn() failed: No such file or directory`, you will need to specify the actual path to Node.js. There is a dedicated environment variable for this.
 
+<br>
+
 `.env`
 
 ```
 NODE_PATH=path/to/node
 ```
 
-
+<br>
 <br>
 
 ## Contributing
