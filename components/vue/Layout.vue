@@ -6,6 +6,15 @@ import Header from './Header.vue';
 import Footer from './Footer.vue';
 
 
+interface LayoutProps
+{
+    logotype ? : string;
+}
+
+
+const props = defineProps<LayoutProps>();
+
+
 const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
 </script>
@@ -14,7 +23,7 @@ const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
     <Table align="center">
 
-        <Header />
+        <Header v-bind:logotype="props.logotype" />
 
         <Table class="p-8 shadow bg-white" align="center" width="570">
 

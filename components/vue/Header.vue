@@ -3,8 +3,17 @@
 import Table from './tags/Table.vue';
 
 
+interface HeaderProps
+{
+    logotype ? : string;
+}
+
+
+const props = defineProps<HeaderProps>();
+
+
 const name = import.meta.env.VITE_APP_NAME;
-const logotype = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-logotype.png';
+const logotype = props.logotype ?? 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-logotype.png';
 
 </script>
 
