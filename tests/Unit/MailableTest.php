@@ -225,7 +225,8 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 
     File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
         ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( $css )
-        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( true );
+        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( true )
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) )->andReturn( false );
 
     $disk = Mockery::mock();
 

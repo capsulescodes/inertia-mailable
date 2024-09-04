@@ -133,6 +133,14 @@ class Mailable extends Base
 
         if( File::exists( App::basePath( 'node_modules/.bin/tailwind' ) ) )
         {
+            $command = [ App::basePath( 'node_modules/.bin/tailwind' ) ];
+
+
+            $input = [ "-i", isset( $css ) ? App::basePath( Config::get( 'inertia-mailable.css' ) ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css' ];
+
+            $command = array_merge( $command, $input );
+
+
             $path = 'framework/mails';
 
             $disk = Storage::build( [ 'driver' => 'local', 'root' => storage_path() ] );
@@ -148,12 +156,19 @@ class Mailable extends Base
 
             $disk->put( $filename , $this->html );
 
+            $content = [ "--content", $disk->path( $filename ) ];
 
-            $file = isset( $css ) ? App::basePath( Config::get( 'inertia-mailable.css' ) ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css';
+            $command = array_merge( $command, $content );
 
-            $tailwind = App::basePath( 'node_modules/.bin/tailwind' );
 
-            $css = $this->process( [ $tailwind, "-i", $file, "--content", $disk->path( $filename ) ] );
+            if( File::exists( App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) ) )
+            {
+                $config = [ '--config', App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) ];
+
+                $command = array_merge( $command, $config );
+            }
+
+            $css = $this->process( $command );
 
 
             if( $disk->has( $filename ) ) $disk->delete( $filename );

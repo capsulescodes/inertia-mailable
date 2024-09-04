@@ -44,5 +44,17 @@ return [
     |
     */
 
-    'css' => 'resources/css/mail.css'
+    'css' => 'resources/css/mail.css',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Tailwind config path
+    |--------------------------------------------------------------------------
+    |
+    | The path where the Tailwind config is located.
+    |
+    */
+
+    'tailwind' => 'tailwind.config.js'
+
 ];

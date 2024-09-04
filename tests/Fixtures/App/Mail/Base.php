@@ -1,13 +1,13 @@
 <?php
 
-namespace CapsulesCodes\InertiaMailable\Tests\Fixtures;
+namespace CapsulesCodes\InertiaMailable\Tests\Fixtures\App\Mail;
 
 
 use CapsulesCodes\InertiaMailable\Mail\Mailable;
 use CapsulesCodes\InertiaMailable\Mail\Mailables\Content;
 
 
-class Mail extends Mailable
+class Base extends Mailable
 {
     private string $name;
 
