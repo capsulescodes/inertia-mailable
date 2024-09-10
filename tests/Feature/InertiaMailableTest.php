@@ -90,7 +90,7 @@ it( "can render a mail based on Vue Javascript file", function() : void
 
     App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
 
-    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia and Vue</p>" );
 } );
 
 
@@ -102,5 +102,5 @@ it( "can render a mail based on Vue Typescript file", function() : void
 
     App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
 
-    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia, Vue with Typescript</p>" );
+    expect( $this->email->render() )->toContain( "<p>Hello, Qux!</p>" )->toContain( "<p>This is a mail made with Laravel, Inertia and Vue with Typescript</p>" );
 } );

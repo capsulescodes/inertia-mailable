@@ -26,7 +26,7 @@ const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/
 
             <p>Hello, {{ props.name }}!</p>
 
-            <p>This is a mail made with Laravel, Inertia, Vue with Typescript</p>
+            <p>This is a mail made with Laravel, Inertia and Vue with Typescript</p>
 
             <Table align="center">
 
