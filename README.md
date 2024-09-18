@@ -7,7 +7,7 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 
 <br>
 
- [This article](https://capsules.codes/en/blog/fyi/en-fyi-build-emails-with-inertia-mailable) provides an in-depth exploration of the package.
+ [This article](https://capsules.codes/en/blog/fyi/en-fyi-craft-emails-with-vue-and-tailwind-using-inertia-mailable) provides an in-depth exploration of the package.
 
 <br>
 
