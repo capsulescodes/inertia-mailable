@@ -185,15 +185,10 @@ class Mailable extends Base
 
     private function process( array $command, Closure | null $callback = null ) : string
     {
-        try
-        {
-            $node = Config::get( 'inertia-mailable.node' );
+        $process = Process::run( [ Config::get( 'inertia-mailable.node' ), ...$command ], $callback );
 
-            return Process::run( [ $node, ...$command ], $callback )->output();
-        }
-        catch( Exception $exception )
-        {
-            throw $exception;
-        }
+        if( $process->failed() ) throw new Exception( $process->errorOutput() );
+
+        return $process->output();
     }
 }

@@ -128,7 +128,7 @@ it( 'throws an exception when node is not found', function() : void
 
     Config::set( 'inertia-mailable.node', 'foo' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->tothrow( Exception::class );
+    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->toThrow( Exception::class, "sh: line 0: exec: foo: not found" );
 } );
 
 
@@ -152,7 +152,7 @@ it( 'returns the expected output when parsing Inertia components', function () :
 
     App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) );
 
-    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'output' )->andReturn( '<div>Hello World</div>' );
+    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'failed' )->andReturnFalse()->shouldReceive( 'output' )->andReturn( '<div>Hello World</div>' );
 
     expect( $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->toBe( '<div>Hello World</div>' );
 } );
@@ -241,6 +241,7 @@ it( 'compiles Tailwind CSS when Tailwind exists', function ()
 
     Process::shouldReceive( 'path' )->andReturnSelf()
         ->shouldReceive( 'run' )->andReturnSelf()
+        ->shouldReceive( 'failed' )->andReturnFalse()
         ->shouldReceive( 'output' )->andReturn( $css );
 
     expect( $mock->getCss() )->toBe( $css );
