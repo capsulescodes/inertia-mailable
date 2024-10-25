@@ -265,9 +265,7 @@ NODE_PATH=path/to/node
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 Please make sure to update tests as appropriate.
-In order to run MySQL tests, credentials have to be configured in the intended TestCases.
 
 <br>
 
@@ -281,7 +279,7 @@ composer test
 
 ## Credits
 
-- [Capsules Codes](https://github.com/capsulescodes)
+[Capsules Codes](https://github.com/capsulescodes)
 
 ## License
 
