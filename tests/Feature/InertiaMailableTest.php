@@ -64,7 +64,7 @@ it( "can render a mail with Tailwind CSS", function()
 
     App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
 
-    expect( $this->email->render() )->toContain( "<p style=\"text-align: center; font-size: 0.75rem; line-height: 1rem; --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity));\">© 2024 undefined. All rights reserved</p>" );
+    expect( $this->email->render() )->toContain( "<p style=\"text-align: center; font-size: 0.75rem; line-height: 1rem; --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity, 1));\">© 2024 undefined. All rights reserved</p>" );
 } );
 
 
@@ -78,7 +78,7 @@ it( "can render a mail with Tailwind CSS and a custom config file", function()
 
     App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
 
-    expect( $this->email->render() )->toContain( "<p style=\"text-align: center; font-size: 6px; line-height: 8px; --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity));\">© 2024 undefined. All rights reserved</p>" );
+    expect( $this->email->render() )->toContain( "<p style=\"text-align: center; font-size: 6px; line-height: 8px; --tw-text-opacity: 1; color: rgb(148 163 184 / var(--tw-text-opacity, 1));\">© 2024 undefined. All rights reserved</p>" );
 } );
 
 
