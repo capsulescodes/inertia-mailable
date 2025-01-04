@@ -128,7 +128,7 @@ it( 'throws an exception when node is not found', function() : void
 
     Config::set( 'inertia-mailable.node', 'foo' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->toThrow( Exception::class );
+    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->toThrow( Exception::class, "sh: line 0: exec: foo: not found" );
 } );
 
 

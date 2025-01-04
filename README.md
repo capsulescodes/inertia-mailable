@@ -189,12 +189,16 @@ php artisan vendor:publish --tag=inertia-mailable-css
 
 <br>
 
-`config.inertia-mailable.php`
+`config/inertia-mailable.php`
 ```php
 
 return [
 
+    ...
+
     'css' => 'resources/css/custom-css.css'
+
+    ...
 
 ];
 ```
@@ -208,12 +212,16 @@ If you want to use a custom tailwind config, modify the path in the `inertia-mai
 
 <br>
 
-`config.inertia-mailable.php`
+`config/inertia-mailable.php`
 ```php
 
 return [
 
+    ...
+
     'tailwind' => 'custom.tailwind.config.js'
+
+    ...
 
 ];
 ```
@@ -249,14 +257,23 @@ public function content() : Content
 
 **- Specify the actual path to node**
 
-If you encounter the following error : `Error: proc_open(): posix_spawn() failed: No such file or directory`, you will need to specify the actual path to Node.js. There is a dedicated environment variable for this.
+If you encounter the following error : `sh: line 0: exec: node: not found`, add node binary's absolute path in the `inertia-mailable` config file or add `NODE_PATH` in your `.env` file.
 
 <br>
 
-`.env`
+`config/inertia-mailable.php`
 
-```
-NODE_PATH=path/to/node
+```php
+
+return [
+
+    ...
+
+    'node' => env( 'NODE_PATH', 'node' ),
+
+    ...
+];
+
 ```
 
 <br>

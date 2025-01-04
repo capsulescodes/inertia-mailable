@@ -98,9 +98,7 @@ class Mailable extends Base
 
         if( ! File::exists( App::basePath( $file ) ) ) throw new Exception( "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
 
-        $callback = function( $type, $output ){ if( $type == 'err' ) throw new Exception( Str::match( '/(Error:.*|\\[Vue warn\\]:.*)/m', $output ) ); };
-
-        return $this->process( [ App::basePath( $file ), json_encode( $data ) ], $callback );
+        return $this->process( [ App::basePath( $file ), json_encode( $data ) ] );
     }
 
     protected function getHtml() : string
