@@ -1,38 +1,18 @@
 import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
-import fs from 'fs';
 
 
-export default defineConfig( {
-    plugins : [ vue(), manifest() ],
+export default defineConfig( ( { isSsrBuild } ) => ( {
+    plugins : [ tailwindcss(), vue() ],
     resolve : { alias : { '/vendor/capsulescodes/inertia-mailable/components' : '/components' } },
     build : {
-        outDir : 'tests/Fixtures/bootstrap/ssr',
+        outDir : isSsrBuild ? 'tests/Fixtures/bootstrap/ssr' : 'tests/Fixtures/public/build',
         emptyOutDir : true,
-        manifest : true,
-        rollupOptions : {
-            input : {
-                'vue-js' : 'stubs/js/vue/mail.js',
-                'vue-ts' : 'stubs/ts/vue/mail.ts'
-            },
-            output : {
-                entryFileNames : '[name].js'
-            }
+        manifest : 'manifest.json',
+        ssrEmitAssets : true,
+        rollupOptions :  {
+            input : isSsrBuild ? { 'vue-js' : 'stubs/js/vue/mail.js', 'vue-ts' : 'stubs/ts/vue/mail.ts', 'mail-css' : 'tests/Fixtures/resources/css/tailwind.css' } : { 'mail-css' : 'tests/Fixtures/resources/css/tailwind.css' }
         }
     }
-} );
-
-
-function manifest()
-{
-    const path = 'tests/Fixtures/bootstrap/ssr';
-
-    return {
-        apply : 'build',
-        writeBundle()
-        {
-            fs.renameSync( `${path}/.vite/manifest.json`, `${path}/manifest.json` );
-            fs.rmdirSync( `${path}/.vite` );
-        }
-    };
-}
+} ) );

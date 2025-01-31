@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 
 import { computed, useSlots } from 'vue';
 import Table from './tags/Table.vue';
@@ -6,13 +6,7 @@ import Header from './Header.vue';
 import Footer from './Footer.vue';
 
 
-interface LayoutProps
-{
-    logotype ? : string;
-}
-
-
-const props = defineProps<LayoutProps>();
+const props = defineProps( { logotype : String } );
 
 
 const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
@@ -21,11 +15,11 @@ const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
 <template>
 
-    <Table align="center">
+    <Table class="bg-slate-100" align="center">
 
         <Header v-bind:logotype="props.logotype" />
 
-        <Table class="p-8 shadow bg-white" align="center" width="570">
+        <Table class="p-8 drop-shadow-md bg-white" align="center" width="570">
 
             <slot />
 

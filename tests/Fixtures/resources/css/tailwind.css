@@ -2,8 +2,8 @@
 @import 'tailwindcss/utilities';
 
 
-@source '../../resources';
-@source '../../vendor/capsulescodes/inertia-mailable/';
+@source "../../../../components";
+@source "../../../../stubs";
 
 
 body

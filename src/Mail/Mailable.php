@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 use Closure;
 use Exception;
 
@@ -96,9 +96,30 @@ class Mailable extends Base
 
         $file = Config::get( 'inertia-mailable.inertia' );
 
-        if( ! File::exists( App::basePath( $file ) ) ) throw new Exception( "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
+        if( File::exists( App::basePath( $file ) ) )
+        {
+            $inertia = App::basePath( $file );
+        }
 
-        return $this->process( [ App::basePath( $file ), json_encode( $data ) ] );
+        $manifest = App::basePath( Config::get( 'inertia-mailable.manifest' ) );
+
+        if( File::exists( $manifest ) )
+        {
+            $content = json_decode( File::get( $manifest ), true );
+
+            $directory = dirname( $manifest );
+
+            $path = Arr::get( Arr::get( $content,  $file ), 'file' );
+
+            if( $path && File::exists( "$directory/$path" ) )
+            {
+                $inertia = "$directory/$path";
+            }
+        }
+
+        if( ! isset( $inertia ) ) throw new Exception( "File not found at path : '{$file}'. Please run 'npm run build', publish file or modify config entries." );
+
+        return $this->process( [ $inertia, json_encode( $data ) ] );
     }
 
     protected function getHtml() : string
@@ -117,68 +138,43 @@ class Mailable extends Base
 
         $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), $inertia, $crawler->first()->outerHtml() );
 
-        $this->html = preg_replace('/>\s+</', '><', html_entity_decode( $html ) );
+        $this->html = html_entity_decode( $html );
 
         return $this->html;
     }
 
     protected function getCss() : string | null
     {
-        if( File::exists( App::basePath( Config::get( 'inertia-mailable.css' ) ) ) )
+        $file = Config::get( 'inertia-mailable.css' );
+
+        if( File::exists( App::basePath( $file ) ) )
         {
-            $css = File::get( App::basePath( Config::get( 'inertia-mailable.css' ) ) );
+            $css = File::get( App::basePath( $file ) );
         }
 
-        if( File::exists( App::basePath( 'node_modules/.bin/tailwind' ) ) )
+        $manifest = App::basePath( Config::get( 'inertia-mailable.manifest' ) );
+
+        if( File::exists( $manifest ) )
         {
-            $command = [ App::basePath( 'node_modules/.bin/tailwind' ) ];
+            $content = json_decode( File::get( $manifest ), true );
 
+            $directory = dirname( $manifest );
 
-            $input = [ "-i", isset( $css ) ? App::basePath( Config::get( 'inertia-mailable.css' ) ) : dirname( __DIR__, 2 ) . '/stubs/css/mail.css' ];
+            $path = Arr::get( Arr::get( $content,  $file ), 'file' );
 
-            $command = array_merge( $command, $input );
-
-
-            $path = 'framework/mails';
-
-            $disk = Storage::build( [ 'driver' => 'local', 'root' => storage_path() ] );
-
-            if( ! $disk->exists( $path ) )
+            if( $path && File::exists( "$directory/$path" ) )
             {
-                $disk->makeDirectory( $path );
-
-                $disk->put( "{$path}/.gitignore", "*\n!.gitignore" );
+                $css = File::get( "$directory/$path" );
             }
-
-            $filename = "$path/" . Str::random( 40 );
-
-            $disk->put( $filename , $this->html );
-
-            $content = [ "--content", $disk->path( $filename ) ];
-
-            $command = array_merge( $command, $content );
-
-
-            if( File::exists( App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) ) )
-            {
-                $config = [ '--config', App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) ];
-
-                $command = array_merge( $command, $config );
-            }
-
-            $css = $this->process( $command );
-
-
-            if( $disk->has( $filename ) ) $disk->delete( $filename );
         }
 
-        return isset( $css ) ? preg_replace( '/\/\*[\s\S]*?\*\//', '', $css ) : null;
+        return $css ?? null;
     }
 
 
     private function convert( $html, $css ) : string
     {
-        return preg_replace( '/\sclass="[^"]*"/i', '',  ( new CssToInlineStyles() )->convert( $html, $css ) );
+        return preg_replace( [ '/>\s+</', '/<!--.*?-->/s', '/\sclass="[^"]*"/i' ] , [ '><', '', '' ], ( new CssToInlineStyles() )->convert( $html, $css ) );
     }
 
     private function process( array $command, Closure | null $callback = null ) : string

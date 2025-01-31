@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import Layout from '/vendor/capsulescodes/inertia-mailable/components/vue/Layout.vue';
-import Table from '/vendor/capsulescodes/inertia-mailable/components/vue/tags/Table.vue';
+import Layout from '/vendor/capsulescodes/inertia-mailable/components/ts/vue/Layout.vue';
+import Table from '/vendor/capsulescodes/inertia-mailable/components/ts/vue/tags/Table.vue';
 
 
 interface WelcomeProps
@@ -24,9 +24,9 @@ const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/
 
         <template v-slot:default>
 
-            <p>Hello, {{ props.name }}!</p>
+            <p class="text-slate-800">Hello, {{ props.name }}!</p>
 
-            <p>This is a mail made with Laravel, Inertia and Vue with Typescript</p>
+            <p class="pt-4 text-sm text-slate-600">This is a mail made with Laravel, Inertia and Vue with Typescript</p>
 
             <Table align="center">
 
@@ -42,15 +42,15 @@ const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/
 
             </Table>
 
-            <p>Regards,</p>
+            <p class="pb-4 text-sm text-slate-600">Regards,</p>
 
-            <p>{{ app }}</p>
+            <p class="text-slate-800">{{ app }}</p>
 
         </template>
 
         <template v-slot:subcopy>
 
-            <p class="text-xs">This is a subcopy made with Laravel, Inertia and Vue with Typescript</p>
+            <p class="text-xs text-slate-600">This is a subcopy made with Laravel, Inertia and Vue with Typescript</p>
 
         </template>
 

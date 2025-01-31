@@ -23,7 +23,7 @@ const logotype = props.logotype ?? 'https://raw.githubusercontent.com/capsulesco
 
         <img v-bind:src="logotype" class="w-12 max-h-12 mb-3" v-bind:alt="name">
 
-        <a v-bind:href="name" class="block text-lg font-bold no-underline text-slate-800" v-text="name" />
+        <a v-bind:href="name" class="block text-lg font-bold no-underline text-slate-600" v-text="name" />
 
     </Table>
 

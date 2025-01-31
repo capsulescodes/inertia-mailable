@@ -25,6 +25,7 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->publishes( [
 
+            "$stubsPath/css/mail.css" => App::resourcePath( 'css/mail.css' ),
             "$stubsPath/js/vue/mail.js" => App::resourcePath( 'js/mail.js' ),
             "$stubsPath/js/vue/mails/Welcome.vue" => App::resourcePath( 'js/mails/Welcome.vue' )
 
@@ -33,6 +34,7 @@ class ServiceProvider extends BaseServiceProvider
 
         $this->publishes( [
 
+            "$stubsPath/css/mail.css" => App::resourcePath( 'css/mail.css' ),
             "$stubsPath/ts/vue/mail.ts" => App::resourcePath( 'ts/mail.ts' ),
             "$stubsPath/ts/vue/mails/Welcome.vue" => App::resourcePath( 'ts/mails/Welcome.vue' )
 

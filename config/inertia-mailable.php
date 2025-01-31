@@ -18,7 +18,7 @@ return [
     | Node path
     |--------------------------------------------------------------------------
     |
-    | The node path.
+    | The path where Node is located.
     |
     */
 
@@ -29,7 +29,7 @@ return [
     | Inertia path
     |--------------------------------------------------------------------------
     |
-    | The path where the built Inertia resource is located.
+    | The path where the Inertia resource is located.
     |
     */
 
@@ -48,13 +48,13 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Tailwind config path
+    | Vite Manifest path
     |--------------------------------------------------------------------------
     |
-    | The path where the Tailwind config is located.
+    | The path where the Vite manifest is located.
     |
     */
 
-    'tailwind' => 'tailwind.config.js'
+    'manifest' => 'public/build/manifest.json'
 
 ];

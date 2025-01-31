@@ -28,18 +28,21 @@ php artisan vendor:publish --tag=inertia-mailable-vue-js
 
 <br>
 
-It publishes two files :
+It publishes three files :
 
+ - `resources/css/mail.css` : base Tailwind CSS file
  - `resources/js/mail.js` : base Inertia file
- - `resources/js/mails/Welcome.vue` : example Vue Component.
+ - `resources/js/mails/Welcome.vue` : example Vue Component
 
 <br>
 
-**2. Add filename into vite config's SSR array**
+**2. Add Inertia file and CSS file in Laravel vite config ssr array**
 
+`vite.config.js`
 ```javascript
 plugins : [
     laravel( {
+        input : [ ..., 'resources/css/mail.css' ],
         ssr : [ ..., 'resources/js/mail.js' ],
     } )
 ```
@@ -173,61 +176,11 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 - [x] Inertia Mailable supports Vue.
 - [x] Inertia Mailable supports Vue with Typescript.
-- [x] Inertia Mailable supports Vue with Tailwindcss.
+- [x] Inertia Mailable supports Vue with Tailwind CSS.
 
 <br>
 
 ## Options
-
-**- Add a custom css file**
-
-If you want to modify the current css file, publish the template and modify the path in the `inertia-mailable` config file.
-
-```bash
-php artisan vendor:publish --tag=inertia-mailable-css
-```
-
-<br>
-
-`config/inertia-mailable.php`
-```php
-
-return [
-
-    ...
-
-    'css' => 'resources/css/custom-css.css'
-
-    ...
-
-];
-```
-
-<br>
-<br>
-
-**- Add a custom Tailwind config file**
-
-If you want to use a custom tailwind config, modify the path in the `inertia-mailable` config file.
-
-<br>
-
-`config/inertia-mailable.php`
-```php
-
-return [
-
-    ...
-
-    'tailwind' => 'custom.tailwind.config.js'
-
-    ...
-
-];
-```
-
-<br>
-<br>
 
 **- Add a custom root blade view**
 
@@ -277,6 +230,44 @@ return [
 ```
 
 <br>
+<br>
+
+**- Emit CSS file in SSR directory**
+
+Since Vite, by default, does not emit assets outside the `public` directory, Inertia Mailable follows the same approach. However, if you want to build all related files into the `ssr` directory, indicate it in the Vite config file and change the Inertia mailable config file.
+
+<br>
+
+`vite.config.js`
+```javascript
+plugins : [
+    laravel( {
+        ssr : [ ..., 'resources/css/mail.css', 'resources/js/mail.js' ],
+    } ),
+    ...
+],
+build : {
+    manifest : 'manifest.json',
+    ssrEmitAssets : true,
+}
+```
+
+<br>
+
+`config/inertia-mailable.php`
+```php
+
+return [
+
+    ...
+
+    'inertia' => 'resources/js/mail.js',
+    'manifest' => 'bootstrap/ssr/manifest.json'
+
+    ...
+];
+```
+
 <br>
 
 ## Contributing

@@ -70,10 +70,10 @@ it( "can render a mail as html", function() : void
     $mailable = Mockery::mock( Mailable::class )->shouldAllowMockingProtectedMethods()->makePartial();
 
     $mailable->shouldReceive( 'prepare' )
-        ->shouldReceive( 'getHtml' )->andReturn( '<div class="foo">Hello World</div>' )
+        ->shouldReceive( 'getHtml' )->andReturn( '<div class="foo">Foo</div>' )
         ->shouldReceive( 'getCss' )->andReturn( '.foo{display:block;}' );
 
-    expect( $mailable->render() )->toContain( '<div style="display: block;">Hello World</div>' );
+    expect( $mailable->render() )->toContain( '<div style="display: block;">Foo</div>' );
 } );
 
 
@@ -118,7 +118,7 @@ it( 'throws an exception when the file is not found', function() : void
 
     $file = Config::get( 'inertia-mailable.inertia' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found at path : {$file}. Please run 'npm run build', publish file or modify config entries." );
+    expect( fn() => $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->tothrow( Exception::class, "File not found at path : '{$file}'. Please run 'npm run build', publish file or modify config entries." );
 } );
 
 
@@ -128,33 +128,46 @@ it( 'throws an exception when node is not found', function() : void
 
     Config::set( 'inertia-mailable.node', 'foo' );
 
-    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->toThrow( Exception::class, "sh: line 0: exec: foo: not found" );
+    expect( fn() => $method->invoke( $this->mailable, [ '-v' ] ) )->toThrow( Exception::class, "exec: foo: not found" );
 } );
 
 
-it( 'converts Html and Css successfully', function() : void
+it( 'returns the expected output when parsing Inertia component', function () : void
 {
-    $method = $this->reflection->getMethod( 'convert' );
+    $inertia = '<div>Foo</div>';
 
-    $html = "<div class=\"foo\">Hello World</div>";
-
-    $css = '.foo { color: red; }';
-
-    expect( $method->invoke( $this->mailable, $html, $css ) )->toContain( "<div style=\"color: red;\">Hello World</div>" );
-} );
-
-
-it( 'returns the expected output when parsing Inertia components', function () : void
-{
     $method = $this->reflection->getMethod( 'getInertia' );
 
-    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/vue-js.js' );
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.inertia' ) ) )->andReturn( true )
+        ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.inertia' ) ) )->andReturn( $inertia )
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( false );
 
-    App::shouldReceive( 'basePath' )->with( Config::get( 'inertia-mailable.inertia' ) )->andReturn( Config::get( 'inertia-mailable.inertia' ) );
+    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'failed' )->andReturnFalse()->shouldReceive( 'output' )->andReturn( $inertia );
 
-    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'failed' )->andReturnFalse()->shouldReceive( 'output' )->andReturn( '<div>Hello World</div>' );
+    expect( $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->toBe( $inertia );
+} );
 
-    expect( $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->toBe( '<div>Hello World</div>' );
+
+it( 'returns the expected output when parsing Inertia component located in manifest', function () : void
+{
+    $content = [ Config::get( 'inertia-mailable.inertia' ) => [ "file" => Config::get( 'inertia-mailable.inertia' ) ] ];
+
+    $directory = dirname( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) );
+
+    $path = Arr::get( Arr::get( $content, Config::get( 'inertia-mailable.inertia' ) ), 'file' );
+
+    $inertia = '<div>Foo</div>';
+
+    $method = $this->reflection->getMethod( 'getInertia' );
+
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.inertia' ) ) )->andReturn( false )
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( true )
+        ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( json_encode( $content ) )
+        ->shouldReceive( 'exists' )->with( "$directory/$path" )->andReturn( true );
+
+    Process::shouldReceive( 'run' )->andReturnSelf()->shouldReceive( 'failed' )->andReturnFalse()->shouldReceive( 'output' )->andReturn( $inertia );
+
+    expect( $method->invoke( $this->mailable, [ 'component' => 'Foo' ] ) )->toBe( $inertia );
 } );
 
 
@@ -164,7 +177,7 @@ it( 'generates the expected HTML', function() : void
 
     $blade = '<html>  <body>  <div id="inertia">  </div>  </body>  </html>';
 
-    $inertia = json_encode([ 'body' => '<div>Hello World</div>' ]);
+    $inertia = json_encode([ 'body' => '<div>Foo</div>' ]);
 
     $id = 'inertia';
 
@@ -185,21 +198,20 @@ it( 'generates the expected HTML', function() : void
 
     $crawler = new Crawler( $blade );
 
+
     $output = Str::replace( $crawler->filter( "#$id" )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
 
-    $html = preg_replace('/>\s+</', '><', html_entity_decode( $output ) );
-
-    expect( $mock->getHtml() )->toBe( $html );
+    expect( $mock->getHtml() )->toBe( html_entity_decode( $output ) );
 
 } );
 
 
-it( 'returns null when neither CSS file nor Tailwind exists', function()
+it( 'returns null when CSS file does not exist', function()
 {
     $method = $this->reflection->getMethod( 'getCss' );
 
-    File::shouldReceive( 'exists' )->with( App::basePath( 'resources/css/mail.css' ) )->andReturn( false )
-        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( false );
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( false )
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( false );
 
     expect( $method->invoke( $this->mailable, [] ) )->toBeNull();
 } );
@@ -213,53 +225,77 @@ it( 'returns CSS when the CSS file exists', function()
 
     File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
         ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( $css )
-        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( false );
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( false );
 
     expect( $method->invoke( $this->mailable, [] ) )->toBe( $css );
 } );
 
 
-it( 'compiles Tailwind CSS when Tailwind exists', function ()
+it( 'returns Tailwind CSS when Tailwind CSS file exists', function ()
 {
     $css = '.body { color: blue; }';
 
+    $method = $this->reflection->getMethod( 'getCss' );
+
     File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
         ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( $css )
-        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( true )
-        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.tailwind' ) ) )->andReturn( false );
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( false );
 
-    $disk = Mockery::mock();
-
-    $disk->shouldReceive( 'exists' )->andReturnTrue()
-        ->shouldReceive( 'put' )->andReturnTrue()
-        ->shouldReceive( 'path' )
-        ->shouldReceive( 'has' )->andReturnFalse();
-
-    Storage::shouldReceive( 'build' )->andReturn( $disk );
-
-    $mock = Mockery::mock( Mailable::class )->makePartial();
-
-    Process::shouldReceive( 'path' )->andReturnSelf()
-        ->shouldReceive( 'run' )->andReturnSelf()
-        ->shouldReceive( 'failed' )->andReturnFalse()
-        ->shouldReceive( 'output' )->andReturn( $css );
-
-    expect( $mock->getCss() )->toBe( $css );
+    expect( $method->invoke( $this->mailable, [] ) )->toBe( $css );
 } );
 
 
-it( "compiles tailwind CSS correctly without comments", function()
+it( 'returns Tailwind CSS when Tailwind CSS file exists in manifest', function ()
 {
-    $css = "/* comment */ .body { color: green; }";
+    $content = [ Config::get( 'inertia-mailable.css' ) => [ "file" => Config::get( 'inertia-mailable.css' ) ] ];
 
-    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( true )
-        ->shouldReceive( 'exists' )->with( App::basePath( 'node_modules/.bin/tailwind' ) )->andReturn( false )
-        ->shouldReceive( 'get' )->with( App::basePath( 'resources/css/mail.css' ) )->andReturn( $css );
+    $directory = dirname( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) );
 
-    $result = Mockery::mock( Mailable::class )->makePartial()->getCss();
+    $path = Arr::get( Arr::get( $content, Config::get( 'inertia-mailable.css' ) ), 'file' );
 
-    expect( $result )->not->toContain( "/* comment */" );
-    expect( $result )->toContain( ".body { color: green; }" );
+    $css = '.body { color: blue; }';
+
+    $method = $this->reflection->getMethod( 'getCss' );
+
+    File::shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.css' ) ) )->andReturn( false )
+        ->shouldReceive( 'exists' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( true )
+        ->shouldReceive( 'get' )->with( App::basePath( Config::get( 'inertia-mailable.manifest' ) ) )->andReturn( json_encode( $content ) )
+        ->shouldReceive( 'exists' )->with( "$directory/$path" )->andReturn( true )
+        ->shouldReceive( 'get' )->with( "$directory/$path" )->andReturn( $css );
+
+    expect( $method->invoke( $this->mailable, [] ) )->toBe( $css );
+} );
+
+
+it( 'converts Html and CSS correctly', function() : void
+{
+    $html = '<div class="foo">Foo</div>';
+
+    $css = '.foo { color: red; }';
+
+    $method = $this->reflection->getMethod( 'convert' );
+
+    expect( $method->invoke( $this->mailable, $html, $css ) )->toContain( '<div style="color: red;">Foo</div>' );
+} );
+
+
+it( "compiles HTML correctly without extra space between tags", function()
+{
+    $html = '<div>Foo</div>    <div>Bar</div>';
+
+    $method = $this->reflection->getMethod( 'convert' );
+
+    expect( $method->invoke( $this->mailable, $html, null ) )->toContain( '<div>Foo</div><div>Bar</div>' );
+} );
+
+
+it( "compiles HTML and CSS correctly without HTML comments", function()
+{
+    $html = '<!--foo--><div>Foo</div>';
+
+    $method = $this->reflection->getMethod( 'convert' );
+
+    expect( $method->invoke( $this->mailable, $html, null ) )->toContain( '<div>Foo</div' );
 } );
 
 
@@ -267,9 +303,9 @@ it( "compiles HTML and CSS correctly without classes", function()
 {
     $css = '.my-4 { margin-top: 10rem; margin-bottom: 10rem; } .max-w-full { max-width: 100%; }';
 
-    $html = '<div class="my-4 max-w-full" >Hello World</div>';
+    $html = '<div class="my-4 max-w-full" >Foo</div>';
 
     $method = $this->reflection->getMethod( 'convert' );
 
-    expect( $method->invoke( $this->mailable, $html, $css ) )->toContain( "<div style=\"margin-top: 10rem; margin-bottom: 10rem; max-width: 100%;\">Hello World</div" );
+    expect( $method->invoke( $this->mailable, $html, $css ) )->toContain( '<div style="margin-top: 10rem; margin-bottom: 10rem; max-width: 100%;">Foo</div' );
 } );
