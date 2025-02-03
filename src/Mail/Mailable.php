@@ -136,9 +136,7 @@ class Mailable extends Base
 
         $id = '#' . Config::get( 'inertia-mailable.id' );
 
-        $html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), $inertia, $crawler->first()->outerHtml() );
-
-        $this->html = html_entity_decode( $html );
+        $this->html = Str::replace( $crawler->filter( $id )->first()->outerHtml(), $inertia, $crawler->first()->outerHtml() );
 
         return $this->html;
     }
