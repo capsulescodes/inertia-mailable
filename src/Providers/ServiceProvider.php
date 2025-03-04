@@ -26,6 +26,24 @@ class ServiceProvider extends BaseServiceProvider
         $this->publishes( [
 
             "$stubsPath/css/mail.css" => App::resourcePath( 'css/mail.css' ),
+            "$stubsPath/js/react/mail.jsx" => App::resourcePath( 'js/mail.jsx' ),
+            "$stubsPath/js/react/mails/Welcome.jsx" => App::resourcePath( 'js/mails/Welcome.jsx' )
+
+        ], 'inertia-mailable-react-js' );
+
+
+        $this->publishes( [
+
+            "$stubsPath/css/mail.css" => App::resourcePath( 'css/mail.css' ),
+            "$stubsPath/ts/react/mail.tsx" => App::resourcePath( 'ts/mail.tsx' ),
+            "$stubsPath/ts/react/mails/Welcome.tsx" => App::resourcePath( 'ts/mails/Welcome.tsx' )
+
+        ], 'inertia-mailable-react-ts' );
+
+
+        $this->publishes( [
+
+            "$stubsPath/css/mail.css" => App::resourcePath( 'css/mail.css' ),
             "$stubsPath/js/vue/mail.js" => App::resourcePath( 'js/mail.js' ),
             "$stubsPath/js/vue/mails/Welcome.vue" => App::resourcePath( 'js/mails/Welcome.vue' )
 

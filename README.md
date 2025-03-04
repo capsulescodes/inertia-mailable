@@ -3,16 +3,14 @@
 
 Seamlessly craft dynamic and reusable email templates using Inertia.
 
-Inertia Mailable empowers you to build beautiful, component-driven emails in Laravel, utilizing the power of InertiaJS. Create interactive and responsive email designs effortlessly by composing Vue components and embedding them into your mailables.
+Inertia Mailable empowers you to build beautiful, component-driven emails in Laravel, utilizing the power of InertiaJS. Create interactive and responsive email designs effortlessly by composing components and embedding them into your mailables.
 
 <br>
 
- [This article](https://capsules.codes/en/blog/fyi/en-fyi-craft-emails-with-vue-and-tailwind-using-inertia-mailable) provides an in-depth exploration of the package.
+For React users, [ this article ](https://capsules.codes/en/blog/fyi/en-fyi-craft-emails-with-react-and-tailwind-using-inertia-mailable) provides an in-depth exploration of the package.
+For Vue users, [ this article ](https://capsules.codes/en/blog/fyi/en-fyi-craft-emails-with-vue-and-tailwind-using-inertia-mailable) provides an in-depth exploration of the package.
 
-<br>
 
-> [!NOTE]
-> This package is currently designed for Laravel and Vue users and is still in development.
 
 <br>
 
@@ -23,7 +21,19 @@ Inertia Mailable empowers you to build beautiful, component-driven emails in Lar
 ```bash
 composer require capsulescodes/inertia-mailable
 
-php artisan vendor:publish --tag=inertia-mailable-vue-js
+> php artisan vendor:publish
+```
+
+```bash
+┌ Which provider or tag's files would you like to publish? ───────────────┐
+ │ Search...                                                               │
+ ├─────────────────────────────────────────────────────────────────────────┤
+ │   ...                                                                 │ │
+ │   Tag: inertia-mailable-react-js                                      │ │
+ │   Tag: inertia-mailable-react-ts                                      │ │
+ │   Tag: inertia-mailable-vue-js                                        │ │
+ │   Tag: inertia-mailable-vue-ts                                        │ │
+ │   ...                                                                 │ │
 ```
 
 <br>
@@ -31,8 +41,8 @@ php artisan vendor:publish --tag=inertia-mailable-vue-js
 It publishes three files :
 
  - `resources/css/mail.css` : base Tailwind CSS file
- - `resources/js/mail.js` : base Inertia file
- - `resources/js/mails/Welcome.vue` : example Vue Component
+ - `resources/{js,ts}/mail.{js,ts,jsx,tsx}` : base Inertia file
+ - `resources/{js,ts}/mails/Welcome.{jsx,tsx,vue}` : example Components
 
 <br>
 
@@ -43,7 +53,7 @@ It publishes three files :
 plugins : [
     laravel( {
         input : [ ..., 'resources/css/mail.css' ],
-        ssr : [ ..., 'resources/js/mail.js' ],
+        ssr : [ ..., 'resources/{js,ts}/mail.{js,ts,jsx,tsx}' ],
     } )
 ```
 
@@ -180,7 +190,31 @@ Route::get( '/send', function(){ Mail::to( 'example@example.com' )->send( new In
 
 <br>
 
+- [x] Inertia Mailable supports React.
+- [x] Inertia Mailable supports React with Typescript.
+- [x] Inertia Mailable supports React with Tailwind CSS.
+
+<br>
+
 ## Options
+
+**- Build your email with Watch mode**
+
+You can dynamically build your component while working on it by enabling the `--watch` option in your `package.json` script. This ensures your components are rebuilt automatically when changes are detected.
+
+```json
+"scripts" : {
+    "watch" : "vite build --ssr --watch"
+},
+```
+
+```bash
+> npm run watch
+
+watching for file changes...
+```
+
+<br>
 
 **- Add a custom root blade view**
 
@@ -242,7 +276,7 @@ Since Vite, by default, does not emit assets outside the `public` directory, Ine
 ```javascript
 plugins : [
     laravel( {
-        ssr : [ ..., 'resources/css/mail.css', 'resources/js/mail.js' ],
+        ssr : [ ..., 'resources/css/mail.css', 'resources/{js,ts}/mail.{js,ts,jsx,tsx}' ],
     } ),
     ...
 ],
@@ -261,7 +295,7 @@ return [
 
     ...
 
-    'inertia' => 'resources/js/mail.js',
+    'inertia' => 'resources/{js,ts}/mail.{js,ts,jsx,tsx}',
     'manifest' => 'bootstrap/ssr/manifest.json'
 
     ...

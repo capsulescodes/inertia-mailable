@@ -106,3 +106,27 @@ it( "can render a mail based on Vue Typescript file", function() : void
 
     expect( $this->email->render() )->toContain( "<p>Hello, Foo!</p>" )->toContain( '<p>This is a mail made with Laravel, Inertia and Vue with Typescript</p>' );
 } );
+
+
+it( "can render a mail based on React Javascript file", function() : void
+{
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/react-js.js' );
+
+    Config::set( 'inertia-mailable.css', 'tests/Fixtures/resources/css/tailwind.css' );
+
+    App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
+
+    expect( $this->email->render() )->toContain( "<p>Hello, Foo!</p>" )->toContain( '<p>This is a mail made with Laravel, Inertia and React</p>' );
+} );
+
+
+it( "can render a mail based on React Typescript file", function() : void
+{
+    Config::set( 'inertia-mailable.inertia', 'tests/Fixtures/bootstrap/ssr/react-ts.js' );
+
+    Config::set( 'inertia-mailable.css', 'tests/Fixtures/resources/css/tailwind.css' );
+
+    App::shouldReceive( 'basePath' )->andReturnUsing( fn( $path ) => $path );
+
+    expect( $this->email->render() )->toContain( "<p>Hello, Foo!</p>" )->toContain( '<p>This is a mail made with Laravel, Inertia and React with Typescript</p>' );
+} );
