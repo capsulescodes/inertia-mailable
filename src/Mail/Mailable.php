@@ -127,7 +127,14 @@ class Mailable extends Base
         $data = $this->getData();
 
 
+        $isSSRenabled = Config::get( 'inertia.ssr.enabled', false );
+
+        if( $isSSRenabled ) Config::set( 'inertia.ssr.enabled', false );
+
         $blade = Response::view( $data[ 'rootView' ], [ 'page' => $data ] )->getContent();
+
+        if( $isSSRenabled ) Config::set( 'inertia.ssr.enabled', true );
+
 
         $inertia = json_decode( $this->getInertia( $data ), true )[ 'body' ];
 

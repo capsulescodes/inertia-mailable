@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Response;
+use Inertia\Ssr\HttpGateway;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Http\Response as HttpResponse;
 
@@ -200,6 +201,70 @@ it( 'generates the expected HTML', function() : void
 
 
     $output = Str::replace( $crawler->filter( "#$id" )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
+
+    expect( $mock->getHtml() )->toBe( html_entity_decode( $output ) );
+
+} );
+
+
+it( 'generates the expected HTML and avoids SSR server call when SSR is active', function() : void
+{
+    $data = [ 'component' => 'Baz', 'props' => [], 'rootView' => 'foo.bar', 'viewData' => [] ];
+
+    $blade = '<html>  <body>  <div id="inertia">  </div>  </body>  </html>';
+
+    $inertia = json_encode( [ 'body' => '<div>Foo</div>' ] );
+
+    $id = 'inertia';
+
+
+
+
+    $mock = Mockery::mock( Mailable::class )->makePartial();
+
+    $mock->root( $data[ 'rootView' ] )->view( $data[ 'component' ], [] );
+
+    $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getData' )->andReturn( $data );
+
+    $response = Mockery::mock( HttpResponse::class )->shouldReceive( 'getContent' )->andReturn( $blade )->getMock();
+
+    $gateway = Mockery::mock( HttpGateway::class );
+
+
+    Response::shouldReceive( 'view' )->with( $data[ 'rootView' ], [ 'page' => $data ] )->andReturnUsing( function( $view, $data ) use ( $response, $gateway )
+    {
+        $gateway->dispatch( $data[ 'page' ] );
+
+        return $response;
+    });
+
+    $mock->shouldAllowMockingProtectedMethods()->shouldReceive( 'getInertia' )->with( $data )->andReturn( $inertia );
+
+    Config::set( 'inertia-mailable.id', $id );
+
+    $crawler = new Crawler( $blade );
+
+    $output = Str::replace( $crawler->filter( "#$id" )->first()->outerHtml(), json_decode( $inertia, true )[ 'body' ], $crawler->first()->outerHtml() );
+
+
+
+
+    Config::set( 'inertia.ssr.enabled', false );
+
+    $gateway->shouldReceive( 'dispatch' )->once()->with( $data )->andReturn( null );
+
+    expect( Config::get( 'inertia.ssr.enabled' ) )->toBe( false );
+
+    expect( $mock->getHtml() )->toBe( html_entity_decode( $output ) );
+
+
+
+
+    Config::set( 'inertia.ssr.enabled', true );
+
+    $gateway->shouldReceive( 'dispatch' )->once()->with( $data )->andReturn( null );
+
+    expect( Config::get( 'inertia.ssr.enabled' ) )->toBe( true );
 
     expect( $mock->getHtml() )->toBe( html_entity_decode( $output ) );
 
