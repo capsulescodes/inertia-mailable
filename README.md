@@ -99,12 +99,12 @@ use Illuminate\Mail\Mailables\Address;
 
 class InertiaMailableInstalled extends Mailable
 {
-    private string $name;
++    private string $name;
 
-
-    public function __construct( string $name )
+-    public function __construct()
++    public function __construct( string $name )
     {
-        $this->name = $name;
++        $this->name = $name;
     }
 
 
