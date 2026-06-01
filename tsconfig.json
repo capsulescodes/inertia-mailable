@@ -1,19 +1,19 @@
 {
-    "compilerOptions" : {
-        "jsx" : "react",
-        "allowSyntheticDefaultImports" :true,
-        "target" : "esnext",
-        "module" : "esnext",
-        "moduleResolution" : "node",
-        "isolatedModules" : true,
-        "strict" : true,
-        "types": [ "node", "vite/client" ],
-        "importHelpers" : true,
-        "removeComments" : true,
-        "skipLibCheck" : true,
-        "strictNullChecks" : true,
-        "paths" : { "/vendor/capsulescodes/inertia-mailable/components/*" : [ "./components/*" ] }
-    },
-    "include" : [ "stubs/ts/**/*", "tests/Fixtures/resources/ts/**/*" ],
-    "exclude" : [ "node_modules/**/*", "vendor/**/*" ]
+	"compilerOptions" : {
+		"jsx" : "react",
+		"allowSyntheticDefaultImports" :true,
+		"target" : "esnext",
+		"module" : "esnext",
+		"moduleResolution" : "node",
+		"isolatedModules" : true,
+		"strict" : true,
+		"types": [ "node", "vite/client" ],
+		"importHelpers" : true,
+		"removeComments" : true,
+		"skipLibCheck" : true,
+		"strictNullChecks" : true,
+		"paths" : { "/vendor/capsulescodes/inertia-mailable/components/*" : [ "./components/*" ] }
+	},
+	"include" : [ "stubs/ts/**/*", "tests/Fixtures/resources/ts/**/*" ],
+	"exclude" : [ "node_modules/**/*", "vendor/**/*" ]
 }

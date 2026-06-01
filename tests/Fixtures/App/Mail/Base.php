@@ -9,21 +9,21 @@ use CapsulesCodes\InertiaMailable\Mail\Mailables\Content;
 
 class Base extends Mailable
 {
-    private string $name;
+	private string $name;
 
 
-    public function __construct( string $name )
-    {
-        $this->name = $name;
-    }
+	public function __construct( string $name )
+	{
+		$this->name = $name;
+	}
 
-    public function content() : Content
-    {
-        return new Content( view : 'Welcome', props : [ 'name' => $this->name ] );
-    }
+	public function content() : Content
+	{
+		return new Content( view : 'Welcome', props : [ 'name' => $this->name ] );
+	}
 
-    public function attachments() : array
-    {
-        return [];
-    }
+	public function attachments() : array
+	{
+		return [];
+	}
 }

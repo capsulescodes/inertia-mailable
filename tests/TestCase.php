@@ -9,8 +9,8 @@ use CapsulesCodes\InertiaMailable\Providers\ServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
-    protected function getPackageProviders( $app ) : array
-    {
-        return [ InertiaServiceProvider::class, ServiceProvider::class ];
-    }
+	protected function getPackageProviders( $app ) : array
+	{
+		return [ InertiaServiceProvider::class, ServiceProvider::class ];
+	}
 }

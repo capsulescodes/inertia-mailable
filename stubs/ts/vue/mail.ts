@@ -6,9 +6,9 @@ import { DefineComponent, createSSRApp, h } from 'vue';
 
 createInertiaApp( {
 
-    page : JSON.parse( process.argv[ 2 ] ),
-    render : renderToString,
-    resolve : ( name : string ) => resolvePageComponent( `./mails/${name}.vue`, import.meta.glob<Promise<DefineComponent>>( './mails/**/*.vue', { eager : true } ) ).then( page => page ),
-    setup( { App, props, plugin } ){ return createSSRApp( { render : () => h( App, props ) } ).use( plugin ); }
+	page : JSON.parse( process.argv[ 2 ] ),
+	render : renderToString,
+	resolve : ( name : string ) => resolvePageComponent( `./mails/${name}.vue`, import.meta.glob<Promise<DefineComponent>>( './mails/**/*.vue', { eager : true } ) ).then( page => page ),
+	setup( { App, props, plugin } ){ return createSSRApp( { render : () => h( App, props ) } ).use( plugin ); }
 
 } ).then( data => process.stdout.write( JSON.stringify( data ) ) );

@@ -6,7 +6,7 @@ import Table from '/vendor/capsulescodes/inertia-mailable/components/ts/vue/tags
 
 interface WelcomeProps
 {
-    name : string;
+	name : string;
 }
 
 
@@ -20,40 +20,40 @@ const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/
 
 <template>
 
-    <Layout>
+	<Layout>
 
-        <template v-slot:default>
+		<template v-slot:default>
 
-            <p class="text-slate-800">Hello, {{ props.name }}!</p>
+			<p class="text-slate-800">Hello, {{ props.name }}!</p>
 
-            <p class="pt-4 text-sm text-slate-600">This is a mail made with Laravel, Inertia and Vue with Typescript</p>
+			<p class="pt-4 text-sm text-slate-600">This is a mail made with Laravel, Inertia and Vue with Typescript</p>
 
-            <Table align="center">
+			<Table align="center">
 
-                <Table align="center">
+				<Table align="center">
 
-                    <Table>
+					<Table>
 
-                        <img class="my-4 max-w-full" v-bind:src="image">
+						<img class="my-4 max-w-full" v-bind:src="image">
 
-                    </Table>
+					</Table>
 
-                </Table>
+				</Table>
 
-            </Table>
+			</Table>
 
-            <p class="pb-4 text-sm text-slate-600">Regards,</p>
+			<p class="pb-4 text-sm text-slate-600">Regards,</p>
 
-            <p class="text-slate-800">{{ app }}</p>
+			<p class="text-slate-800">{{ app }}</p>
 
-        </template>
+		</template>
 
-        <template v-slot:subcopy>
+		<template v-slot:subcopy>
 
-            <p class="text-xs text-slate-600">This is a subcopy made with Laravel, Inertia and Vue with Typescript</p>
+			<p class="text-xs text-slate-600">This is a subcopy made with Laravel, Inertia and Vue with Typescript</p>
 
-        </template>
+		</template>
 
-    </Layout>
+	</Layout>
 
 </template>

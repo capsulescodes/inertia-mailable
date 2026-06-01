@@ -6,23 +6,23 @@ const props = defineProps( { width : String, cellpadding : String, cellspacing :
 
 <template>
 
-    <table
-        v-bind:width="props.width ?? '100%'"
-        v-bind:cellpadding="props.cellpadding ?? '0'"
-        v-bind:cellspacing="props.cellspacing ?? '0'"
-        v-bind:role="props.role ?? 'presentation'"
-    >
+	<table
+		v-bind:width="props.width ?? '100%'"
+		v-bind:cellpadding="props.cellpadding ?? '0'"
+		v-bind:cellspacing="props.cellspacing ?? '0'"
+		v-bind:role="props.role ?? 'presentation'"
+	>
 
-        <tr>
+		<tr>
 
-            <td>
+			<td>
 
-                <slot />
+				<slot />
 
-            </td>
+			</td>
 
-        </tr>
+		</tr>
 
-    </table>
+	</table>
 
 </template>

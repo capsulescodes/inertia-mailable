@@ -5,48 +5,48 @@ import Table from '/vendor/capsulescodes/inertia-mailable/components/js/react/ta
 
 function Welcome( { name } )
 {
-    const app = process.env.VITE_APP_NAME;
-    const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png';
+	const app = process.env.VITE_APP_NAME;
+	const image = 'https://raw.githubusercontent.com/capsulescodes/inertia-mailable/main/art/capsules-inertia-mailable-mail-image.png';
 
 
-    return (
+	return (
 
-        <Layout>
+		<Layout>
 
-            <div>
+			<div>
 
-                <p className="text-slate-800">Hello, { name }!</p>
+				<p className="text-slate-800">Hello, { name }!</p>
 
-                <p className="pt-4 text-sm text-slate-600">This is a mail made with Laravel, Inertia and React</p>
+				<p className="pt-4 text-sm text-slate-600">This is a mail made with Laravel, Inertia and React</p>
 
-                <Table align="center">
+				<Table align="center">
 
-                    <Table align="center">
+					<Table align="center">
 
-                        <Table>
+						<Table>
 
-                            <img className="my-4 max-w-full" src={ image } />
+							<img className="my-4 max-w-full" src={ image } />
 
-                        </Table>
+						</Table>
 
-                    </Table>
+					</Table>
 
-                </Table>
+				</Table>
 
-                <p className="pb-4 text-sm text-slate-600">Regards,</p>
+				<p className="pb-4 text-sm text-slate-600">Regards,</p>
 
-                <p className="text-slate-800">{ app }</p>
+				<p className="text-slate-800">{ app }</p>
 
-            </div>
+			</div>
 
-            <Subcopy>
+			<Subcopy>
 
-                <p className="text-xs text-slate-600">This is a subcopy made with Laravel, Inertia and React</p>
+				<p className="text-xs text-slate-600">This is a subcopy made with Laravel, Inertia and React</p>
 
-            </Subcopy>
+			</Subcopy>
 
-        </Layout>
-    );
+		</Layout>
+	);
 };
 
 

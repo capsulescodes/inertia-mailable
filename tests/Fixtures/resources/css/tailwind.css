@@ -8,5 +8,5 @@
 
 body
 {
-    @apply m-0 p-0 relative box-border font-['system-ui'];
+	@apply m-0 p-0 relative box-border font-['system-ui'];
 }

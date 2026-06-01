@@ -10,10 +10,10 @@ const date = new Date().getFullYear();
 
 <template>
 
-    <Table class="p-10" align="center" v-bind:width="'570'">
+	<Table class="p-10" align="center" v-bind:width="'570'">
 
-        <p class="text-xs text-center text-slate-400" v-text="`© ${date} ${name}. All rights reserved`" />
+		<p class="text-xs text-center text-slate-400" v-text="`© ${date} ${name}. All rights reserved`" />
 
-    </Table>
+	</Table>
 
 </template>

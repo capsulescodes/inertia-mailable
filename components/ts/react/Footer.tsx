@@ -4,22 +4,22 @@ import Table from './tags/Table';
 
 function Footer() : React.JSX.Element
 {
-    const name = process.env.VITE_APP_NAME;
-    const date = new Date().getFullYear();
+	const name = process.env.VITE_APP_NAME;
+	const date = new Date().getFullYear();
 
 
-    return (
+	return (
 
-        <Table className="p-10" align="center" width="570">
+		<Table className="p-10" align="center" width="570">
 
-            <p className="text-xs text-center text-slate-400">
+			<p className="text-xs text-center text-slate-400">
 
-                { `© ${date} ${name}. All rights reserved` }
+				{ `© ${date} ${name}. All rights reserved` }
 
-            </p>
+			</p>
 
-        </Table>
-    );
+		</Table>
+	);
 };
 
 

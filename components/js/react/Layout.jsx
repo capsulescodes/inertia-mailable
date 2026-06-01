@@ -6,35 +6,35 @@ import Footer from './Footer';
 
 function Layout( { logotype, children } )
 {
-    const slots = React.Children.toArray( children ).filter( child => ! React.isValidElement( child ) || typeof child.type !== 'function' || child.type.displayName !== 'Subcopy' );
+	const slots = React.Children.toArray( children ).filter( child => ! React.isValidElement( child ) || typeof child.type !== 'function' || child.type.displayName !== 'Subcopy' );
 
-    const subcopies = React.Children.toArray( children ).filter( child => React.isValidElement( child ) && typeof child.type === 'function' && child.type.displayName === 'Subcopy' );
+	const subcopies = React.Children.toArray( children ).filter( child => React.isValidElement( child ) && typeof child.type === 'function' && child.type.displayName === 'Subcopy' );
 
 
-    return (
+	return (
 
-        <Table className="bg-slate-100" align="center">
+		<Table className="bg-slate-100" align="center">
 
-            <Header logotype={ logotype } />
+			<Header logotype={ logotype } />
 
-            <Table className="p-8 drop-shadow-md bg-white" align="center" width="570">
+			<Table className="p-8 drop-shadow-md bg-white" align="center" width="570">
 
-                { slots }
+				{ slots }
 
-                { subcopies.length && ( <Table className="mt-6 pt-6 border-0 border-t border-solid border-slate-200">{ subcopies }</Table> ) }
+				{ subcopies.length && ( <Table className="mt-6 pt-6 border-0 border-t border-solid border-slate-200">{ subcopies }</Table> ) }
 
-            </Table>
+			</Table>
 
-            <Footer />
+			<Footer />
 
-        </Table>
-    );
+		</Table>
+	);
 };
 
 
 function Subcopy( { children } )
 {
-    return ( <>{ children }</> );
+	return ( <>{ children }</> );
 }
 
 Subcopy.displayName = 'Subcopy';

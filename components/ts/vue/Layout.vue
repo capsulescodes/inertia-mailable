@@ -8,7 +8,7 @@ import Footer from './Footer.vue';
 
 interface LayoutProps
 {
-    logotype ? : string;
+	logotype ? : string;
 }
 
 
@@ -21,24 +21,24 @@ const hasSubCopy = computed( () => !! useSlots()[ 'subcopy' ] );
 
 <template>
 
-    <Table class="bg-slate-100" align="center">
+	<Table class="bg-slate-100" align="center">
 
-        <Header v-bind:logotype="props.logotype" />
+		<Header v-bind:logotype="props.logotype" />
 
-        <Table class="p-8 drop-shadow-md bg-white" align="center" width="570">
+		<Table class="p-8 drop-shadow-md bg-white" align="center" width="570">
 
-            <slot />
+			<slot />
 
-            <Table v-if="hasSubCopy" class="mt-6 pt-6 border-0 border-t border-solid border-slate-200">
+			<Table v-if="hasSubCopy" class="mt-6 pt-6 border-0 border-t border-solid border-slate-200">
 
-                <slot name="subcopy" />
+				<slot name="subcopy" />
 
-            </Table>
+			</Table>
 
-        </Table>
+		</Table>
 
-        <Footer />
+		<Footer />
 
-    </Table>
+	</Table>
 
 </template>
